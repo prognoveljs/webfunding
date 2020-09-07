@@ -42,18 +42,18 @@
 
 ## 0.1.0
 
-- FEATURE: Custom syntax with `<template fundme></template>` tags.
+- FEATURE: Custom syntax with `<template webfunding></template>` tags.
 
 ## 0.0.5
 
 - Now you can use string to provide payment pointer address weight with modifier `#`. For example: `$wallet.address.com/test#22` will be read as having `$wallet.address.com/test` as its address and has `22` weight.
-- Fix: error parsing JSON `<script fundme>` if the content is `string`.
+- Fix: error parsing JSON `<script webfunding>` if the content is `string`.
 
 ## 0.0.4
 
 - Add examples for using fundme.js in the browser.
-- Now `<script fundme>` will throw an error if its type not `application/json`.
-- Test: add test for `<script fundme>` type.
+- Now `<script webfunding>` will throw an error if its type not `application/json`.
+- Test: add test for `<script webfunding>` type.
 
 ## 0.0.3
 

@@ -142,10 +142,10 @@ It's possible to declare pointer address with `<template></template>` tags. Inst
 </script>
 ```
 
-If you prefer to work directly from JSON, like listing revenue sharing contributors from server-side or static sites, you can also write an array in `<script fundme type="application/json">` tags. (Note the `fundme` attribute!)
+If you prefer to work directly from JSON, like listing revenue sharing contributors from server-side or static sites, you can also write an array in `<script webfunding type="application/json">` tags. (Note the `fundme` attribute!)
 
 ```html
-<script fundme type="application/json">
+<script webfunding type="application/json">
   [
     "$xrp.com/some-address-with-no-weight",
     {
@@ -168,12 +168,12 @@ If you prefer to work directly from JSON, like listing revenue sharing contribut
 </script>
 ```
 
-However, we have an opiniated (and recommended) way to declare payment pointers with familiar custom syntax. We're using `<template fundme></template>` tags but without declare payment pointers and revenue share weights inside `data-fund` and such, declaring them directly inside the tags instead.
+However, we have an opiniated (and recommended) way to declare payment pointers with familiar custom syntax. We're using `<template webfunding></template>` tags but without declare payment pointers and revenue share weights inside `data-fund` and such, declaring them directly inside the tags instead.
 
 NOTE: all payment pointer has to be separated by semicolons (like CSS or JavaScript lines).
 
 ```html
-<template fundme>
+<template webfunding>
   $wallet.example.com/this-has-weight-ten#10; 
   $wallet.example.com/this-has-weight-twelve#12;
   $wallet.example.com/this-has-weight-eight#8;
@@ -197,7 +197,7 @@ One example of this is how a blogging platform provides a revenue sharing scheme
 Fundme.js provides a simple way to do it:
 
 ```html
-<template fundme>
+<template webfunding>
   $wallet.example.com/author#10; 
   $wallet.example.com/editor-one#6;
   $wallet.example.com/editor-two#6;

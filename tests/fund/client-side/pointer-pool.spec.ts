@@ -15,7 +15,7 @@ describe("test getCurrentPointerPool()", () => {
       },
     ];
     document.body.innerHTML = `
-      <script fundme type="application/json">
+      <script webfunding type="application/json">
         ${JSON.stringify(pointers)}
       </script>
     `;

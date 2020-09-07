@@ -156,7 +156,7 @@ describe("calculating relative weight", () => {
 describe("ensure relative weight on HTML template is working", () => {
   test("with custom syntax", () => {
     document.body.innerHTML = `
-    <template fundme>
+    <template webfunding>
       $wallet.example.com/testing-one#40;
       $wallet.example.com/testing-two#60;
       $wallet.example.com/testing-three#50%;
@@ -210,7 +210,7 @@ describe("ensure relative weight on HTML template is working", () => {
   });
   test("with json template", () => {
     document.body.innerHTML = `
-      <script fundme type="application/json">
+      <script webfunding type="application/json">
       [
         "$wallet.example.com/testing-one#40",
         "$wallet.example.com/testing-two#60",

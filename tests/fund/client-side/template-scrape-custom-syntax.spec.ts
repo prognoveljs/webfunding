@@ -2,7 +2,7 @@ import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
 import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
 
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
-// import { scriptFundmeIsNotApplicationJson } from '../../../src/fund/errors'
+// import { scriptWebfundingIsNotApplicationJson } from '../../../src/fund/errors'
 
 expect.extend({ toBeInTheDocument, toHaveAttribute });
 
@@ -10,7 +10,7 @@ describe("parsing custom syntax", () => {
   test("works with hash # weight modifier", () => {
     forceFundmeOnBrowser();
     document.body.innerHTML = `
-      <template fundme>
+      <template webfunding>
         $wallet.example.com/testing-one#22;
         $wallet.example.com/testing-two#44;
         $wallet.example.com/testing-three#33;
@@ -37,7 +37,7 @@ describe("parsing custom syntax", () => {
   });
   test("works with a pointer with no weight explicitly stated", () => {
     document.body.innerHTML = `
-      <template fundme>
+      <template webfunding>
         $wallet.example.com/testing-one;
         $wallet.example.com/testing-two#44;
         $wallet.example.com/testing-three#33;

@@ -39,10 +39,10 @@ export const templateSinglePointerHasWeight =
 
 // script json template
 export const cannotParseScriptJson =
-  "cannot parse JSON from <script fundme>. Make sure it contains a valid JSON.";
-export const jsonTemplateIsInvalid = "found <script fundme> but it's not valid.";
-export const scriptFundmeIsNotApplicationJson =
-  'found <script fundme> but its type is not "application/json"';
+  "cannot parse JSON from <script webfunding>. Make sure it contains a valid JSON.";
+export const jsonTemplateIsInvalid = "found <script webfunding> but it's not valid.";
+export const scriptWebfundingIsNotApplicationJson =
+  'found <script webfunding> but its type is not "application/json"';
 
 // relative weight
 export const paymentPointersMustHaveAtLeastOneFixedPointer =

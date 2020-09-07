@@ -1,15 +1,14 @@
 import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
 import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
-
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
-import { scriptFundmeIsNotApplicationJson } from "../../../src/fund/errors";
+import { scriptWebfundingIsNotApplicationJson } from "../../../src/fund/errors";
 
 expect.extend({ toBeInTheDocument, toHaveAttribute });
 
 describe("parsing fundme template from a JSON array", () => {
-  test('fund() will scrape from <script fundme type="application/json">', () => {
+  test('fund() will scrape from <script webfunding type="application/json">', () => {
     document.body.innerHTML = `
-    <script fundme type="application/json">
+    <script webfunding type="application/json">
     [
       "$coil.xrptipbot.com/my-pointer",
       {
@@ -26,9 +25,9 @@ describe("parsing fundme template from a JSON array", () => {
     expect(pool[0].address).toBe("$coil.xrptipbot.com/my-pointer");
     document.body.innerHTML = "";
   });
-  test("<script fundme> accepts single string", () => {
+  test("<script webfunding> accepts single string", () => {
     document.body.innerHTML = `
-      <script fundme type="application/json">
+      <script webfunding type="application/json">
         "$coil.xrptipbot.com/my-pointer"
       </script>
     `;
@@ -40,10 +39,10 @@ describe("parsing fundme template from a JSON array", () => {
     document.body.innerHTML = "";
   });
 
-  test('<script fundme> must have MIME type "application/json"', () => {
+  test('<script webfunding> must have MIME type "application/json"', () => {
     // const pointerAddress = '$coil.com/pointer-address1'
     document.body.innerHTML = `
-      <script fundme>
+      <script webfunding>
         [
           "$coil.com/my-pointer",
           {
@@ -55,7 +54,7 @@ describe("parsing fundme template from a JSON array", () => {
     `;
     forceFundmeOnBrowser();
     // @ts-ignore
-    expect(() => fund()).toThrowError(scriptFundmeIsNotApplicationJson);
+    expect(() => fund()).toThrowError(scriptWebfundingIsNotApplicationJson);
     document.body.innerHTML = "";
   });
 });

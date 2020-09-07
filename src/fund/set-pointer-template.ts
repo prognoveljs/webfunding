@@ -8,15 +8,15 @@ import {
 import {
   noTemplateFound,
   failParsingTemplate,
-  scriptFundmeIsNotApplicationJson,
+  scriptWebfundingIsNotApplicationJson,
   cannotParseScriptJson,
   jsonTemplateIsInvalid,
   WebfundingError,
 } from "./errors";
 
-export const FUNDME_TEMPLATE_SELECTOR = "template[data-fund]";
-export const FUNDME_CUSTOM_SYNTAX_SELECTOR = "template[fundme]";
-export const FUNDME_JSON_SELECTOR = "script[fundme]";
+export const WEBFUNDING_TEMPLATE_SELECTOR = "template[data-fund]";
+export const WEBFUNDING_CUSTOM_SYNTAX_SELECTOR = "template[webfunding]";
+export const WEBFUNDING_JSON_SELECTOR = "script[webfunding]";
 
 type JSONTemplate = Array<WMPointer | string>;
 
@@ -38,7 +38,7 @@ export function setPointerFromTemplates(options: fundOptions = {}): void {
 // fund() already do that
 export function scrapeJson(): WMPointer[] {
   const scriptTags: NodeListOf<HTMLScriptElement> = document.body.querySelectorAll(
-    FUNDME_JSON_SELECTOR,
+    WEBFUNDING_JSON_SELECTOR,
   );
   let pointers: WMPointer[] = [];
 
@@ -62,7 +62,7 @@ function parseScriptJson(json: HTMLScriptElement): WMPointer[] {
   }
 
   if (json.type !== "application/json") {
-    throw WebfundingError(scriptFundmeIsNotApplicationJson);
+    throw WebfundingError(scriptWebfundingIsNotApplicationJson);
   }
 
   if (Array.isArray(parsed)) {
@@ -78,7 +78,7 @@ function parseScriptJson(json: HTMLScriptElement): WMPointer[] {
 
 export function scrapeTemplate(): WMPointer[] {
   const templates: NodeListOf<HTMLTemplateElement> = document.body.querySelectorAll(
-    FUNDME_TEMPLATE_SELECTOR,
+    WEBFUNDING_TEMPLATE_SELECTOR,
   );
   let pointers: WMPointer[] = [];
 
@@ -110,7 +110,7 @@ export function parseTemplate(template: HTMLTemplateElement): WMPointer {
 
 export function scrapeCustomSyntax(): WMPointer[] {
   const templates: NodeListOf<HTMLTemplateElement> = document.querySelectorAll(
-    FUNDME_CUSTOM_SYNTAX_SELECTOR,
+    WEBFUNDING_CUSTOM_SYNTAX_SELECTOR,
   );
   let pointers: WMPointer[] = [];
 
