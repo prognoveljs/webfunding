@@ -6,7 +6,7 @@ import {
   convertToPointerPool,
 } from "../../../src/fund/utils";
 import { getCurrentPointerAddress } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 import {
   metaTagNotFound,
   WebfundingError,
@@ -109,7 +109,7 @@ describe("ensure pickPointer() is robust", () => {
 
 describe("test getCurrentPointerAddress() when there's no meta tag", () => {
   test("throw not found", () => {
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     expect(() => getCurrentPointerAddress()).toThrowError(WebfundingError(metaTagNotFound));
   });
 });

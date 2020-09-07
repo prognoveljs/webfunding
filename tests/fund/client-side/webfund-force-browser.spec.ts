@@ -1,5 +1,9 @@
 import { fund } from "../../../src/fund/mod";
-import { isBrowser, forceFundmeOnBrowser, clientSideFund } from "../../../src/fund/fund-browser";
+import {
+  isBrowser,
+  forceWebfundingOnBrowser,
+  clientSideFund,
+} from "../../../src/fund/fund-browser";
 
 //@ts-ignore
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";

@@ -19,7 +19,7 @@ import {
 import { createPool } from "../../../src/fund/set-pointer-multiple";
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
 import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 expect.extend({ toBeInTheDocument, toHaveAttribute });
 
 describe("calculating relative weight", () => {
@@ -162,7 +162,7 @@ describe("ensure relative weight on HTML template is working", () => {
       $wallet.example.com/testing-three#50%;
     </template>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     const expectedPool = [
       {
@@ -188,7 +188,7 @@ describe("ensure relative weight on HTML template is working", () => {
     <template data-fund="$wallet.example.com/testing-two" data-fund-weight="60"></template>
     <template data-fund="$wallet.example.com/testing-three" data-fund-weight="50%"></template>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     const expectedPool = [
       {
@@ -220,7 +220,7 @@ describe("ensure relative weight on HTML template is working", () => {
       ]
       </script>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     const expectedPool = [
       {
@@ -250,7 +250,7 @@ describe("ensure relative weight on HTML template is working", () => {
   });
 
   test("with basic multiple pointers fund()", () => {
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund([
       "$wallet.example.com/testing-one#40",
       "$wallet.example.com/testing-two#60",

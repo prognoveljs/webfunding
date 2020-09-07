@@ -1,5 +1,5 @@
 import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 
 //@ts-ignore
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
@@ -12,7 +12,7 @@ describe("get monetization pointer address from <template></template>", () => {
     document.body.innerHTML = `
     <template data-fund="${pointerAddress}"></template>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     // @ts-ignore
     expect(getCurrentPointerPool()[0].weight).not.toBe(NaN);
@@ -28,7 +28,7 @@ describe("get monetization pointer address from <template></template>", () => {
       <template data-fund="${pointerAddress}"></template>
       <template data-fund="${pointerAddress}222"></template>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     // const metaTag: HTMLMetaElement = document.querySelector('meta[name="monetization"]')
     // expect(metaTag).toBeInTheDocument()
@@ -45,7 +45,7 @@ describe("get monetization pointer address from <template></template>", () => {
       <template data-fund="${pointerAddress}"></template>
       <template data-fund="${pointerAddress}222" data-fund-weight="44"></template>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     // const metaTag: HTMLMetaElement = document.querySelector('meta[name="monetization"]')
     // expect(metaTag).toBeInTheDocument()
@@ -63,7 +63,7 @@ describe("get monetization pointer address from <template></template>", () => {
       <template data-fund="${pointerAddress}222" data-fund-weight="44"></template>
     `;
 
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     // const metaTag: HTMLMetaElement = document.querySelector('meta[name="monetization"]')
     // expect(metaTag).toBeInTheDocument()

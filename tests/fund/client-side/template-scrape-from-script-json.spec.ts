@@ -1,5 +1,5 @@
 import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
 import { scriptWebfundingIsNotApplicationJson } from "../../../src/fund/errors";
 
@@ -18,7 +18,7 @@ describe("parsing fundme template from a JSON array", () => {
     ]
     </script>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     const pool = getCurrentPointerPool();
     // @ts-ignore
@@ -31,7 +31,7 @@ describe("parsing fundme template from a JSON array", () => {
         "$coil.xrptipbot.com/my-pointer"
       </script>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     const pool = getCurrentPointerPool();
     // @ts-ignore
@@ -52,7 +52,7 @@ describe("parsing fundme template from a JSON array", () => {
         ]
       </script>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     // @ts-ignore
     expect(() => fund()).toThrowError(scriptWebfundingIsNotApplicationJson);
     document.body.innerHTML = "";

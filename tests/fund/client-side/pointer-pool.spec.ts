@@ -1,5 +1,5 @@
 import { getCurrentPointerPool, fund } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 import { convertToPointerPool, hasAddress } from "../../../src/fund/utils";
 
 describe("test getCurrentPointerPool()", () => {
@@ -19,7 +19,7 @@ describe("test getCurrentPointerPool()", () => {
         ${JSON.stringify(pointers)}
       </script>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund();
     expect(getCurrentPointerPool()).toEqual(pointers);
     document.body.innerHTML = "";

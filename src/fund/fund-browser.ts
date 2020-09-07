@@ -46,7 +46,7 @@ export function clientSideFund(pointer?: WMAddress, options?: fundOptions): Fund
 }
 
 let forceBrowser: boolean = false;
-export function forceFundmeOnBrowser(force: boolean = true) {
+export function forceWebfundingOnBrowser(force: boolean = true) {
   forceBrowser = force;
 }
 

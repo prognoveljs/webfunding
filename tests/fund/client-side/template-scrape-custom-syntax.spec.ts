@@ -1,5 +1,5 @@
 import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
 // import { scriptWebfundingIsNotApplicationJson } from '../../../src/fund/errors'
@@ -8,7 +8,7 @@ expect.extend({ toBeInTheDocument, toHaveAttribute });
 
 describe("parsing custom syntax", () => {
   test("works with hash # weight modifier", () => {
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     document.body.innerHTML = `
       <template webfunding>
         $wallet.example.com/testing-one#22;
@@ -43,7 +43,7 @@ describe("parsing custom syntax", () => {
         $wallet.example.com/testing-three#33;
       </template>
     `;
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund(null);
     const expectedPool = [
       {

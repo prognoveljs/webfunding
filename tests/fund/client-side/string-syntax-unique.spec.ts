@@ -1,11 +1,11 @@
 import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 import { cleanSinglePointerSyntax } from "../../../src/fund/utils";
 import { WebfundingError, canOnlyCleanStringCustomSyntax } from "../../../src/fund/errors";
 
 describe("Unique syntax on string", () => {
   test("will result correct weights", () => {
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund(["$wallet.example.com/testing-1#33", "$wallet.example.com/testing-2#22"]);
 
     const expectedPool = [

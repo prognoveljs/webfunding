@@ -1,5 +1,5 @@
 import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
 
@@ -7,7 +7,7 @@ expect.extend({ toBeInTheDocument, toHaveAttribute });
 
 describe('get weight from <template data-fund-weight="xx" />', () => {
   test("fund() will scrape from template", () => {
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     const pointerAddress = "$coil.com/pointer-address1";
     document.body.innerHTML = `
       <template data-fund="${pointerAddress}" data-fund-weight="52" ></template>

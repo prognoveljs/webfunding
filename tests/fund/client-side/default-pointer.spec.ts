@@ -4,7 +4,7 @@ import {
   getCurrentPointerAddress,
   getCurrentPointerPool,
 } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 import {
   defaultAddressNotFound,
   invalidDefaultAddress,
@@ -17,13 +17,13 @@ import { getDefaultAddress, defaultAddressMultiple } from "../../../src/fund/uti
 describe("default pointer", () => {
   test("correctly set default pointer for single paramter", () => {
     setDefaultAddress("$wallet.example.com/test1");
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund("default");
     expect(getCurrentPointerAddress()).toBe("$wallet.example.com/test1");
   });
   test("correctly set default pointer for single paramter with object", () => {
     setDefaultAddress({ address: "$wallet.example.com/test2" });
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund("default");
     expect(getCurrentPointerAddress()).toBe("$wallet.example.com/test2");
   });
@@ -57,7 +57,7 @@ describe("default pointer", () => {
       },
     ];
 
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     fund("default");
     expect(getCurrentPointerPool()).toEqual(expectedPointers);
   });

@@ -1,10 +1,10 @@
 import { fund, getCurrentPointerAddress } from "../../../src/fund/mod";
-import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
 import { invalidAddress } from "../../../src/fund/errors";
 
 describe("correctly fund() argument", () => {
   test("get single pointer if parameter is a string", () => {
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     const myFundingType = fund("test");
 
     expect(myFundingType).toBe("single");
@@ -28,14 +28,14 @@ describe("correctly fund() argument", () => {
 
   test("get from templates if parameter is empty", () => {
     document.body.innerHTML = '<template data-fund="meta" />';
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     const myFundingType = fund();
 
     expect(myFundingType).toBe("template");
   });
 
   test("throw if fund() argument is not valid", () => {
-    forceFundmeOnBrowser();
+    forceWebfundingOnBrowser();
     // @ts-ignore
     expect(() => fund({})).toThrowError(invalidAddress);
   });
