@@ -1,6 +1,6 @@
 import { clientSideFund, isBrowser } from "./fund-browser";
 import { serverSideFund } from "./fund-server";
-import { noUndefinedFundOnServerSide, FundmeError } from "./errors";
+import { noUndefinedFundOnServerSide, WebfundingError } from "./errors";
 
 export enum FundType {
   isSingle = "single",
@@ -15,7 +15,7 @@ export function fund(pointer?: WMAddress, options: fundOptions = {}): FundType |
     return clientSideFund(pointer, options);
   } else {
     if (pointer === undefined) {
-      throw FundmeError(noUndefinedFundOnServerSide);
+      throw WebfundingError(noUndefinedFundOnServerSide);
     } else {
       return serverSideFund(pointer);
     }

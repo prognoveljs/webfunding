@@ -5,7 +5,7 @@ import {
   metaTagNotFound,
   metaTagMultipleIsFound,
   getCurrentPointerAddressMustClientSide,
-  FundmeError,
+  WebfundingError,
   canOnlyCleanStringCustomSyntax,
   defaultAddressArrayCannotBeEmpty,
   invalidDefaultAddress,
@@ -63,7 +63,7 @@ export function getWinningPointer(pointers: WMPointer[], choice: number): WMPoin
   for (const pointer in pointers) {
     const weight: weight = pointers[pointer].weight ?? DEFAULT_WEIGHT; // TODO - safecheck null assertion
 
-    if (typeof weight !== "number") throw FundmeError(getWinningPointerMustBeANumber);
+    if (typeof weight !== "number") throw WebfundingError(getWinningPointerMustBeANumber);
 
     if ((choice -= weight) <= 0) {
       return pointers[pointer];
@@ -91,7 +91,7 @@ export function setDefaultAddress(
       defaultAddress = createPool(address);
       return;
     } else {
-      throw FundmeError(defaultAddressArrayCannotBeEmpty);
+      throw WebfundingError(defaultAddressArrayCannotBeEmpty);
     }
   }
 
@@ -111,7 +111,7 @@ export function setDefaultAddress(
     return;
   }
 
-  throw FundmeError(invalidDefaultAddress);
+  throw WebfundingError(invalidDefaultAddress);
 }
 
 export function getDefaultAddress(): defaultAddress {
@@ -142,16 +142,16 @@ export function getCurrentPointerAddress(): string {
     );
 
     if (metaTag.length > 1) {
-      throw FundmeError(metaTagMultipleIsFound);
+      throw WebfundingError(metaTagMultipleIsFound);
     }
 
     if (metaTag[0]) {
       return metaTag[0].content;
     }
-    throw FundmeError(metaTagNotFound);
+    throw WebfundingError(metaTagNotFound);
   } else {
     if (currentPointer) return currentPointer.toString();
-    throw FundmeError(getCurrentPointerAddressMustClientSide);
+    throw WebfundingError(getCurrentPointerAddressMustClientSide);
   }
 }
 
@@ -159,7 +159,7 @@ export function cleanSinglePointerSyntax(pointer: any): any {
   if (typeof pointer === "string") {
     pointer = pointer.split("#")[0];
   } else {
-    throw FundmeError(canOnlyCleanStringCustomSyntax);
+    throw WebfundingError(canOnlyCleanStringCustomSyntax);
   }
 
   return pointer;

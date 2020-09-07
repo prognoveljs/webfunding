@@ -1,4 +1,4 @@
-import { FundmeError, splitFundError } from "../../../src/fund/errors";
+import { WebfundingError, splitFundError } from "../../../src/fund/errors";
 import { fund } from "../../../src/fund/fund";
 import { splitFund } from "../../../src/fund/split";
 import { setCurrentPointer } from "../../../src/fund/utils";
@@ -32,6 +32,6 @@ describe("split fund works as expected", () => {
 
   test("it throw an error if pointers haven't yet initiated", () => {
     setCurrentPointer([]);
-    expect(() => splitFund(1)).toThrowError(FundmeError(splitFundError));
+    expect(() => splitFund(1)).toThrowError(WebfundingError(splitFundError));
   });
 });

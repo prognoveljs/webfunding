@@ -1,4 +1,4 @@
-import { FundmeError, splitFundError } from "./errors";
+import { WebfundingError, splitFundError } from "./errors";
 import { getCurrentPointerPool, getPoolWeightSum } from "./utils";
 import { calculateRelativeWeight } from "./relative-weight";
 import { createPool } from "./set-pointer-multiple";
@@ -13,7 +13,7 @@ export function splitFund(amount: number): splittedFund[] {
   let pool: WMPointer[] = createPool(getCurrentPointerPool());
   let sum = 0;
   if (!pool.length) {
-    throw FundmeError(splitFundError);
+    throw WebfundingError(splitFundError);
   } else {
     // process pointer pool
     pool = calculateRelativeWeight(pool);

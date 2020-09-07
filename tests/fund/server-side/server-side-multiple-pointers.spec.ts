@@ -2,7 +2,7 @@ import { fund } from "../../../src/fund/mod";
 import {
   noUndefinedFundOnServerSide,
   invalidFundmeServerSide,
-  FundmeError,
+  WebfundingError,
 } from "../../../src/fund/errors";
 
 describe("multiple pointer server side", () => {
@@ -18,17 +18,17 @@ describe("multiple pointer server side", () => {
   });
 
   test("server-side fund() can't scrape from templates", () => {
-    expect(() => fund()).toThrowError(FundmeError(noUndefinedFundOnServerSide));
-    expect(() => fund(undefined)).toThrowError(FundmeError(noUndefinedFundOnServerSide));
-    expect(() => fund(null)).toThrowError(FundmeError(noUndefinedFundOnServerSide));
+    expect(() => fund()).toThrowError(WebfundingError(noUndefinedFundOnServerSide));
+    expect(() => fund(undefined)).toThrowError(WebfundingError(noUndefinedFundOnServerSide));
+    expect(() => fund(null)).toThrowError(WebfundingError(noUndefinedFundOnServerSide));
   });
 
   test("server-side fund() no invalid parameters", () => {
     const invalidPointer = {};
     const invalidPointer2 = 4444;
     //@ts-ignore
-    expect(() => fund(invalidPointer)).toThrowError(FundmeError(invalidFundmeServerSide));
+    expect(() => fund(invalidPointer)).toThrowError(WebfundingError(invalidFundmeServerSide));
     //@ts-ignore
-    expect(() => fund(invalidPointer2)).toThrowError(FundmeError(invalidFundmeServerSide));
+    expect(() => fund(invalidPointer2)).toThrowError(WebfundingError(invalidFundmeServerSide));
   });
 });

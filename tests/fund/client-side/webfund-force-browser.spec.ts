@@ -4,7 +4,7 @@ import { isBrowser, forceFundmeOnBrowser, clientSideFund } from "../../../src/fu
 //@ts-ignore
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
 import { FundType } from "../../../src/fund/fund";
-import { FundmeError, invalidFundmeServerSide } from "../../../src/fund/errors";
+import { WebfundingError, invalidFundmeServerSide } from "../../../src/fund/errors";
 
 expect.extend({ toBeInTheDocument, toHaveAttribute });
 
@@ -53,6 +53,6 @@ describe("test isBrowser()", () => {
       clientSideFund(pointer, {
         force: "server",
       });
-    }).toThrowError(FundmeError(invalidFundmeServerSide));
+    }).toThrowError(WebfundingError(invalidFundmeServerSide));
   });
 });

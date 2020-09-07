@@ -5,14 +5,14 @@ import {
   jsonTemplateIsInvalid,
   cannotParseScriptJson,
   failParsingTemplate,
-  FundmeError,
+  WebfundingError,
 } from "../../../src/fund/errors";
 
 describe("test scraping template crashes resulting right throw errors", () => {
   test("fund() is called but no template is found", () => {
     document.body.innerHTML = "";
     forceFundmeOnBrowser();
-    expect(() => fund()).toThrowError(FundmeError(noTemplateFound));
+    expect(() => fund()).toThrowError(WebfundingError(noTemplateFound));
     document.body.innerHTML = "";
   });
 
@@ -26,7 +26,7 @@ describe("test scraping template crashes resulting right throw errors", () => {
       </script>
     `;
     forceFundmeOnBrowser();
-    expect(() => fund()).toThrowError(FundmeError(jsonTemplateIsInvalid));
+    expect(() => fund()).toThrowError(WebfundingError(jsonTemplateIsInvalid));
     document.body.innerHTML = "";
   });
 
@@ -37,7 +37,7 @@ describe("test scraping template crashes resulting right throw errors", () => {
       </script>
     `;
     forceFundmeOnBrowser();
-    expect(() => fund()).toThrowError(FundmeError(cannotParseScriptJson));
+    expect(() => fund()).toThrowError(WebfundingError(cannotParseScriptJson));
     document.body.innerHTML = "";
   });
 
@@ -50,7 +50,7 @@ describe("test scraping template crashes resulting right throw errors", () => {
       forceFundmeOnBrowser();
       fund();
     }
-    expect(fundThrow).toThrowError(FundmeError(failParsingTemplate));
+    expect(fundThrow).toThrowError(WebfundingError(failParsingTemplate));
     document.body.innerHTML = "";
   });
 });

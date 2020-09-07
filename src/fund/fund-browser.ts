@@ -5,7 +5,7 @@ import { setPointerMultiple } from "./set-pointer-multiple";
 import {
   defaultAddressNotFound,
   invalidAddress,
-  FundmeError,
+  WebfundingError,
   invalidFundmeServerSide,
 } from "./errors";
 import { FundType } from "./fund";
@@ -17,7 +17,7 @@ export function clientSideFund(pointer?: WMAddress, options?: fundOptions): Fund
   }
 
   if (options && options.force === "server") {
-    throw FundmeError(invalidFundmeServerSide);
+    throw WebfundingError(invalidFundmeServerSide);
   }
 
   if (typeof pointer === "string") {
@@ -30,7 +30,7 @@ export function clientSideFund(pointer?: WMAddress, options?: fundOptions): Fund
         }
         return setFundType(FundType.isDefault);
       } else {
-        throw FundmeError(defaultAddressNotFound);
+        throw WebfundingError(defaultAddressNotFound);
       }
     }
     setPointerSingle(pointer, options);
@@ -42,7 +42,7 @@ export function clientSideFund(pointer?: WMAddress, options?: fundOptions): Fund
     return setFundType(FundType.isMultiple);
   }
 
-  throw FundmeError(invalidAddress);
+  throw WebfundingError(invalidAddress);
 }
 
 let forceBrowser: boolean = false;

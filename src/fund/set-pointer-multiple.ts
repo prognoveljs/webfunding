@@ -6,7 +6,7 @@ import {
   hasAddress,
 } from "./utils";
 import { calculateRelativeWeight } from "./relative-weight";
-import { addressNotFound, addressIsNotAString, FundmeError } from "./errors";
+import { addressNotFound, addressIsNotAString, WebfundingError } from "./errors";
 import { isBrowser } from "./fund-browser";
 
 export const DEFAULT_WEIGHT: number = 5;
@@ -33,9 +33,9 @@ export function getPointerAddress(pointer: WMPointer): string {
   const address = pointer.address;
 
   if (!address) {
-    throw FundmeError(addressNotFound);
+    throw WebfundingError(addressNotFound);
   } else if (typeof address !== "string") {
-    throw FundmeError(addressIsNotAString);
+    throw WebfundingError(addressIsNotAString);
   }
   return address;
 }
@@ -44,7 +44,7 @@ export function createPool(pointers: Array<string | WMPointer>): WMPointer[] {
   return pointers.map((pointer) => {
     let wmPointer: WMPointer;
     if (typeof pointer === "string") pointer = convertToPointer(pointer);
-    if (!hasAddress(pointer)) throw FundmeError(addressNotFound);
+    if (!hasAddress(pointer)) throw WebfundingError(addressNotFound);
     wmPointer = checkWeight(pointer);
 
     return wmPointer;

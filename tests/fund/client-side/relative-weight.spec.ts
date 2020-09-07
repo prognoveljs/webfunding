@@ -11,7 +11,7 @@ import {
   relativeWeightMustEndsWithPercentage,
   invalidWeight,
   invalidRelativeWeight,
-  FundmeError,
+  WebfundingError,
   paymentPointersMustHaveAtLeastOneFixedPointer,
   relativeWeightChanceError,
   weightForRelativePointerNotFound,
@@ -113,7 +113,7 @@ describe("calculating relative weight", () => {
     ];
 
     expect(() => calculateRelativeWeight(createPool(noFixedPointers))).toThrowError(
-      FundmeError(paymentPointersMustHaveAtLeastOneFixedPointer),
+      WebfundingError(paymentPointersMustHaveAtLeastOneFixedPointer),
     );
   });
 
@@ -130,7 +130,7 @@ describe("calculating relative weight", () => {
       console.log(test);
     }).toThrowError(
       // one
-      FundmeError(invalidWeight("$wallet.example.com/example-1", error1)),
+      WebfundingError(invalidWeight("$wallet.example.com/example-1", error1)),
     );
 
     const invalidPointerPool2 = [
@@ -139,7 +139,7 @@ describe("calculating relative weight", () => {
     ];
     expect(() => calculateRelativeWeight(createPool(invalidPointerPool2))).toThrowError(
       // two
-      FundmeError(invalidWeight("$wallet.example.com/example-1", error2)),
+      WebfundingError(invalidWeight("$wallet.example.com/example-1", error2)),
     );
 
     const invalidPointerPool3 = [
@@ -148,7 +148,7 @@ describe("calculating relative weight", () => {
     ];
     expect(() => calculateRelativeWeight(createPool(invalidPointerPool3))).toThrowError(
       // three
-      FundmeError(invalidRelativeWeight("$wallet.example.com/example-1")),
+      WebfundingError(invalidRelativeWeight("$wallet.example.com/example-1")),
     );
   });
 });
@@ -346,7 +346,7 @@ describe("normalize payment pointers", () => {
   });
   test("throw if normalize'd pointers chance more than 100%", () => {
     expect(() => normalizeFixedPointers([], 1.5)).toThrowError(
-      FundmeError(relativeWeightChanceError),
+      WebfundingError(relativeWeightChanceError),
     );
   });
 });
@@ -372,7 +372,7 @@ describe("relative weight getWeight() function", () => {
   test("throw if relative weight not end with %", () => {
     const pointer = "$wallet.example.com/test#11";
     expect(() => getRelativeWeight(pointer)).toThrowError(
-      FundmeError(relativeWeightMustEndsWithPercentage),
+      WebfundingError(relativeWeightMustEndsWithPercentage),
     );
   });
   test("throw if relative weight not end with %", () => {
@@ -381,28 +381,28 @@ describe("relative weight getWeight() function", () => {
       weight: "11",
     };
     expect(() => getRelativeWeight(pointer)).toThrowError(
-      FundmeError(relativeWeightMustEndsWithPercentage),
+      WebfundingError(relativeWeightMustEndsWithPercentage),
     );
   });
 
   test("throw if getWeight() recieves no weight pointer", () => {
     const pointer = { address: "$wallet.example.com/test" };
     expect(() => getRelativeWeight(pointer)).toThrowError(
-      FundmeError(weightForRelativePointerNotFound(pointer.address)),
+      WebfundingError(weightForRelativePointerNotFound(pointer.address)),
     );
   });
 
   test("throw if getWeight() recieves invalid weight", () => {
     const pointer = { address: "$wallet.example.com/test", weight: true };
     expect(() => getRelativeWeight(pointer)).toThrowError(
-      FundmeError(invalidRelativeWeight(pointer.address)),
+      WebfundingError(invalidRelativeWeight(pointer.address)),
     );
   });
 
   test("throw error if no weight found", () => {
     const pointer = { address: "$wallet.address.com/test" };
     expect(() => getRelativeWeight(pointer)).toThrowError(
-      FundmeError(weightForRelativePointerNotFound(pointer.address)),
+      WebfundingError(weightForRelativePointerNotFound(pointer.address)),
     );
   });
 });

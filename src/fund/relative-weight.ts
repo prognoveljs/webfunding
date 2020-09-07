@@ -1,6 +1,6 @@
 import { getPoolWeightSum, isNumberOnly } from "./utils";
 import {
-  FundmeError,
+  WebfundingError,
   relativeWeightMustEndsWithPercentage,
   paymentPointersMustHaveAtLeastOneFixedPointer,
   invalidWeight,
@@ -36,7 +36,8 @@ export function calculateRelativeWeight(pool: WMPointer[]): WMPointer[] {
 
   relativeWeightPointers = pool.filter(filterRelativeWeight);
   // console.log(relativeWeightPointers);
-  if (!fixedWeightPointers.length) throw FundmeError(paymentPointersMustHaveAtLeastOneFixedPointer);
+  if (!fixedWeightPointers.length)
+    throw WebfundingError(paymentPointersMustHaveAtLeastOneFixedPointer);
 
   return [
     ...normalizeFixedPointers(fixedWeightPointers, totalRelativeChance),
@@ -52,7 +53,7 @@ export function filterRelativeWeight(pointer: WMPointer): boolean {
   if (typeof weight === "string" && weight.endsWith("%")) {
     const convertedWeight = weight.slice(0, -1);
     if (!isNumberOnly(convertedWeight)) {
-      throw FundmeError(invalidRelativeWeight(pointer.address));
+      throw WebfundingError(invalidRelativeWeight(pointer.address));
     }
     registerRelativeWeight(pointer);
     return true;
@@ -63,7 +64,7 @@ export function filterRelativeWeight(pointer: WMPointer): boolean {
     return false;
   }
 
-  throw FundmeError(invalidWeight(pointer.address, weight));
+  throw WebfundingError(invalidWeight(pointer.address, weight));
 }
 
 export function registerRelativeWeight(pointer: WMPointer) {
@@ -80,7 +81,7 @@ export function registerFixedWeight(pointer: WMPointer) {
 }
 
 export function normalizeFixedPointers(pool: WMPointer[], chance: number): WMPointer[] {
-  if (chance > 1 || chance === NaN) throw FundmeError(relativeWeightChanceError);
+  if (chance > 1 || chance === NaN) throw WebfundingError(relativeWeightChanceError);
   chance = 1 - chance;
   // decrease all fixed pointer weights
   // based on total relative chance registered
@@ -113,18 +114,19 @@ export function getRelativeWeight(pointer: string | WMPointer): number {
     if (pointer.endsWith("%")) {
       chance = parseFloat(weight) / 100;
     } else {
-      throw FundmeError(relativeWeightMustEndsWithPercentage);
+      throw WebfundingError(relativeWeightMustEndsWithPercentage);
     }
   } else {
     if (!pointer.weight) {
-      throw FundmeError(weightForRelativePointerNotFound(pointer.address));
+      throw WebfundingError(weightForRelativePointerNotFound(pointer.address));
     }
 
     if (typeof pointer.weight === "string") {
-      if (!pointer.weight.endsWith("%")) throw FundmeError(relativeWeightMustEndsWithPercentage);
+      if (!pointer.weight.endsWith("%"))
+        throw WebfundingError(relativeWeightMustEndsWithPercentage);
       pointer.weight = parseFloat(pointer.weight);
     } else {
-      throw FundmeError(invalidRelativeWeight(pointer.address));
+      throw WebfundingError(invalidRelativeWeight(pointer.address));
     }
 
     chance = pointer.weight / 100;

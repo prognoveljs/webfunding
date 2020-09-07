@@ -1,7 +1,7 @@
 import { DEFAULT_WEIGHT } from "./set-pointer-multiple";
 
-export function FundmeError(err: string): string {
-  return "Fundme.js: " + err;
+export function WebfundingError(err: string): string {
+  return "Webfunding.js: " + err;
 }
 
 export const addressNotFound = "address not found.";

@@ -9,7 +9,7 @@ import { getCurrentPointerAddress } from "../../../src/fund/mod";
 import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
 import {
   metaTagNotFound,
-  FundmeError,
+  WebfundingError,
   getWinningPointerMustBeANumber,
 } from "../../../src/fund/errors";
 
@@ -102,7 +102,7 @@ describe("ensure pickPointer() is robust", () => {
       },
     ];
     expect(() => getWinningPointer(invalidPointer, 11)).toThrow(
-      FundmeError(getWinningPointerMustBeANumber),
+      WebfundingError(getWinningPointerMustBeANumber),
     );
   });
 });
@@ -110,7 +110,7 @@ describe("ensure pickPointer() is robust", () => {
 describe("test getCurrentPointerAddress() when there's no meta tag", () => {
   test("throw not found", () => {
     forceFundmeOnBrowser();
-    expect(() => getCurrentPointerAddress()).toThrowError(FundmeError(metaTagNotFound));
+    expect(() => getCurrentPointerAddress()).toThrowError(WebfundingError(metaTagNotFound));
   });
 });
 

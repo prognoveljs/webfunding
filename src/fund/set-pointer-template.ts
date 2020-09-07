@@ -11,7 +11,7 @@ import {
   scriptFundmeIsNotApplicationJson,
   cannotParseScriptJson,
   jsonTemplateIsInvalid,
-  FundmeError,
+  WebfundingError,
 } from "./errors";
 
 export const FUNDME_TEMPLATE_SELECTOR = "template[data-fund]";
@@ -30,7 +30,7 @@ export function setPointerFromTemplates(options: fundOptions = {}): void {
   if (pointers.length) {
     setPointerMultiple(pointers, options);
   } else {
-    throw FundmeError(noTemplateFound);
+    throw WebfundingError(noTemplateFound);
   }
 }
 
@@ -58,11 +58,11 @@ function parseScriptJson(json: HTMLScriptElement): WMPointer[] {
   try {
     parsed = JSON.parse(json.innerHTML);
   } catch (err) {
-    throw FundmeError(cannotParseScriptJson);
+    throw WebfundingError(cannotParseScriptJson);
   }
 
   if (json.type !== "application/json") {
-    throw FundmeError(scriptFundmeIsNotApplicationJson);
+    throw WebfundingError(scriptFundmeIsNotApplicationJson);
   }
 
   if (Array.isArray(parsed)) {
@@ -70,7 +70,7 @@ function parseScriptJson(json: HTMLScriptElement): WMPointer[] {
   } else if (typeof parsed === "string") {
     pointers = createPool([parsed]);
   } else {
-    throw FundmeError(jsonTemplateIsInvalid);
+    throw WebfundingError(jsonTemplateIsInvalid);
   }
 
   return pointers;
@@ -97,7 +97,7 @@ export function parseTemplate(template: HTMLTemplateElement): WMPointer {
   let weight: weight = template.dataset.fundWeight ?? DEFAULT_WEIGHT;
 
   if (!address) {
-    throw FundmeError(failParsingTemplate);
+    throw WebfundingError(failParsingTemplate);
   }
 
   const pointer: WMPointer = checkWeight({

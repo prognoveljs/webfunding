@@ -9,7 +9,7 @@ import {
   defaultAddressNotFound,
   invalidDefaultAddress,
   defaultAddressArrayCannotBeEmpty,
-  FundmeError,
+  WebfundingError,
 } from "../../../src/fund/errors";
 import { DEFAULT_WEIGHT } from "../../../src/fund/set-pointer-multiple";
 import { getDefaultAddress, defaultAddressMultiple } from "../../../src/fund/utils";
@@ -75,14 +75,14 @@ describe("default pointer", () => {
     expect(() => {
       setDefaultAddress(undefined, { allowUndefined: true }); //@ts-ignore
       fund("default", { force: "client" });
-    }).toThrowError(FundmeError(defaultAddressNotFound));
+    }).toThrowError(WebfundingError(defaultAddressNotFound));
   });
 
   test("throw if default address undefined", () => {
     //@ts-ignore
     expect(() => {
       setDefaultAddress(undefined); //@ts-ignore
-    }).toThrowError(FundmeError(invalidDefaultAddress));
+    }).toThrowError(WebfundingError(invalidDefaultAddress));
   });
 
   test("throw if default address invalid", () => {
@@ -91,9 +91,9 @@ describe("default pointer", () => {
       console.log("Default address is", getDefaultAddress());
     };
     //@ts-ignore
-    expect(() => set({})).toThrowError(FundmeError(invalidDefaultAddress));
+    expect(() => set({})).toThrowError(WebfundingError(invalidDefaultAddress));
     //@ts-ignore
-    expect(() => set(4)).toThrowError(FundmeError(invalidDefaultAddress));
+    expect(() => set(4)).toThrowError(WebfundingError(invalidDefaultAddress));
   });
   test("throw if default address is array but empty", () => {
     const set = (any) => {
@@ -101,6 +101,6 @@ describe("default pointer", () => {
       console.log("Default address is", getDefaultAddress());
     };
     //@ts-ignore
-    expect(() => set([])).toThrowError(FundmeError(defaultAddressArrayCannotBeEmpty));
+    expect(() => set([])).toThrowError(WebfundingError(defaultAddressArrayCannotBeEmpty));
   });
 });

@@ -1,11 +1,10 @@
 import { isMultiplePointer } from "./utils";
 import { setPointerMultiple } from "./set-pointer-multiple";
-import { FundmeError, invalidFundmeServerSide, noUndefinedFundOnServerSide } from "./errors";
+import { WebfundingError, invalidFundmeServerSide, noUndefinedFundOnServerSide } from "./errors";
 import { setPointerSingle } from "./set-pointer-single";
-import { isNullOrUndefined } from "util";
 
 export function serverSideFund(pointer: WMAddress): string {
-  if (pointer === null || pointer === undefined) throw FundmeError(noUndefinedFundOnServerSide);
+  if (pointer === null || pointer === undefined) throw WebfundingError(noUndefinedFundOnServerSide);
 
   if (typeof pointer === "string") {
     return setPointerSingle(pointer).toString();
@@ -15,5 +14,5 @@ export function serverSideFund(pointer: WMAddress): string {
     return setPointerMultiple(pointer).toString();
   }
 
-  throw FundmeError(invalidFundmeServerSide);
+  throw WebfundingError(invalidFundmeServerSide);
 }

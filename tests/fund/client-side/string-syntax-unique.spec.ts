@@ -1,7 +1,7 @@
 import { fund, getCurrentPointerPool } from "../../../src/fund/mod";
 import { forceFundmeOnBrowser } from "../../../src/fund/fund-browser";
 import { cleanSinglePointerSyntax } from "../../../src/fund/utils";
-import { FundmeError, canOnlyCleanStringCustomSyntax } from "../../../src/fund/errors";
+import { WebfundingError, canOnlyCleanStringCustomSyntax } from "../../../src/fund/errors";
 
 describe("Unique syntax on string", () => {
   test("will result correct weights", () => {
@@ -30,13 +30,13 @@ describe("Unique syntax on string", () => {
 
   test("can only clean string", () => {
     expect(() => cleanSinglePointerSyntax(4)).toThrowError(
-      FundmeError(canOnlyCleanStringCustomSyntax),
+      WebfundingError(canOnlyCleanStringCustomSyntax),
     );
     expect(() => cleanSinglePointerSyntax({})).toThrowError(
-      FundmeError(canOnlyCleanStringCustomSyntax),
+      WebfundingError(canOnlyCleanStringCustomSyntax),
     );
     expect(() => cleanSinglePointerSyntax(["$wallet.example.com/address"])).toThrowError(
-      FundmeError(canOnlyCleanStringCustomSyntax),
+      WebfundingError(canOnlyCleanStringCustomSyntax),
     );
   });
 });
