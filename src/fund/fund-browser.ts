@@ -6,7 +6,7 @@ import {
   defaultAddressNotFound,
   invalidAddress,
   WebfundingError,
-  invalidFundmeServerSide,
+  invalidWebfundingServerSide,
 } from "./errors";
 import { FundType } from "./fund";
 
@@ -17,7 +17,7 @@ export function clientSideFund(pointer?: WMAddress, options?: fundOptions): Fund
   }
 
   if (options && options.force === "server") {
-    throw WebfundingError(invalidFundmeServerSide);
+    throw WebfundingError(invalidWebfundingServerSide);
   }
 
   if (typeof pointer === "string") {

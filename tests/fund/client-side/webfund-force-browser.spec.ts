@@ -8,7 +8,7 @@ import {
 //@ts-ignore
 import { toBeInTheDocument, toHaveAttribute } from "@testing-library/jest-dom/matchers";
 import { FundType } from "../../../src/fund/fund";
-import { WebfundingError, invalidFundmeServerSide } from "../../../src/fund/errors";
+import { WebfundingError, invalidWebfundingServerSide } from "../../../src/fund/errors";
 
 expect.extend({ toBeInTheDocument, toHaveAttribute });
 
@@ -57,6 +57,6 @@ describe("test isBrowser()", () => {
       clientSideFund(pointer, {
         force: "server",
       });
-    }).toThrowError(WebfundingError(invalidFundmeServerSide));
+    }).toThrowError(WebfundingError(invalidWebfundingServerSide));
   });
 });

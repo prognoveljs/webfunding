@@ -1,7 +1,7 @@
 import { fund } from "../../../src/fund/mod";
 import {
   noUndefinedFundOnServerSide,
-  invalidFundmeServerSide,
+  invalidWebfundingServerSide,
   WebfundingError,
 } from "../../../src/fund/errors";
 
@@ -27,8 +27,8 @@ describe("multiple pointer server side", () => {
     const invalidPointer = {};
     const invalidPointer2 = 4444;
     //@ts-ignore
-    expect(() => fund(invalidPointer)).toThrowError(WebfundingError(invalidFundmeServerSide));
+    expect(() => fund(invalidPointer)).toThrowError(WebfundingError(invalidWebfundingServerSide));
     //@ts-ignore
-    expect(() => fund(invalidPointer2)).toThrowError(WebfundingError(invalidFundmeServerSide));
+    expect(() => fund(invalidPointer2)).toThrowError(WebfundingError(invalidWebfundingServerSide));
   });
 });

@@ -69,4 +69,4 @@ export const splitFundError = `must set web monetization pointer address with fu
  *                           *
  *****************************/
 export const noUndefinedFundOnServerSide = "can't use fund() with empty parameters in server side.";
-export const invalidFundmeServerSide = "invalid fundme on the server-side.";
+export const invalidWebfundingServerSide = "invalid webfunding on the server-side.";
