@@ -15,17 +15,17 @@ export default {
     babel({ extensions, babelHelpers: 'bundled', include: ['src/**/*'] }),
   ],
   output: [{
-    file: 'dist/fundme-iife.js',
+    file: 'dist/webfunding-iife.js',
     format: 'iife',
-    name: 'fundme'
+    name: 'webfunding'
   }, {
-    file: 'dist/fundme-cjs.js',
+    file: 'dist/webfunding-cjs.js',
     format: 'cjs'
   }, {
-    file: 'dist/fundme.mjs',
+    file: 'dist/webfunding.mjs',
     format: 'es'
   }, {
-    file: 'dist/fundme-amd.js',
+    file: 'dist/webfunding-amd.js',
     format: 'amd',
   }]
 };

@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Monetization API test!</title>
-    <meta name="monetization" content />
-  </head>
 
-  <body>
-    <h1 id="text">Loading...</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Monetization API test!</title>
+  <meta name="monetization" content />
+</head>
 
-    <template webfunding>
-      $wallet.example.com/example-2#60;
-      $wallet.example.com/example-3#40;
-      $wallet.example.com/example-1#25%; 
-    </template>
+<body>
+  <h1 id="text">Loading...</h1>
 
-    <script src="../../dist/fundme-iife.js"></script>
-    <script>
-      fundme.fund();
+  <template webfunding>
+    $wallet.example.com/example-2#60;
+    $wallet.example.com/example-3#40;
+    $wallet.example.com/example-1#25%;
+  </template>
 
-      // code below are optional, just to show that fundme is working
-      if (document.monetization) {
-        const address = document.querySelector('meta[name="monetization"]').content;
-        document.getElementById("text").innerText = `Browser is streaming to ${address}`;
-      } else {
-        document.getElementById("text").innerText = `Coil extension not found.`;
-      }
-    </script>
-  </body>
+  <script src="../../dist/webfunding-iife.js"></script>
+  <script>
+    webfunding.fund();
+
+    // code below are optional, just to show that webfunding is working
+    if (document.monetization) {
+      const address = document.querySelector('meta[name="monetization"]').content;
+      document.getElementById("text").innerText = `Browser is streaming to ${address}`;
+    } else {
+      document.getElementById("text").innerText = `Coil extension not found.`;
+    }
+  </script>
+</body>
+
 </html>

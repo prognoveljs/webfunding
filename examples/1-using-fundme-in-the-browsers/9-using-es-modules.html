@@ -13,8 +13,8 @@
 
   <!-- 
       below is a script tag with JSON type
-      the script tag must have fundme attribute so 
-      Fundme.js can recognize it
+      the script tag must have webfunding attribute so 
+      webfunding.js can recognize it
     -->
   <script webfunding type="application/json">
       [
@@ -34,9 +34,9 @@
     </script>
 
   <script type="module">
-    import { fund } from '../../dist/fundme.mjs'
+    import { fund } from '../../dist/webfunding.mjs'
 
-    // notice that the function below is not fundme.fund anymore
+    // notice that the function below is not webfunding.fund anymore
     fund()
 
     /*
@@ -46,7 +46,7 @@
       https://caniuse.com/es-modules
     */
 
-    // code below are optional, just to show that fundme is working
+    // code below are optional, just to show that webfunding is working
     if (document.monetization) {
       const address = document.querySelector('meta[name="monetization"]').content
       document.getElementById('text').innerText = `Browser is streaming to ${address}`

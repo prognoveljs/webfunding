@@ -5,7 +5,7 @@ import { scriptWebfundingIsNotApplicationJson } from "../../../src/fund/errors";
 
 expect.extend({ toBeInTheDocument, toHaveAttribute });
 
-describe("parsing fundme template from a JSON array", () => {
+describe("parsing webfunding template from a JSON array", () => {
   test('fund() will scrape from <script webfunding type="application/json">', () => {
     document.body.innerHTML = `
     <script webfunding type="application/json">

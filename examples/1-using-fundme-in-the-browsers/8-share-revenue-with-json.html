@@ -13,8 +13,8 @@
 
   <!-- 
       below is a script tag with JSON type
-      the script tag must have fundme attribute so 
-      Fundme.js can recognize it
+      the script tag must have webfunding attribute so 
+      webfunding.js can recognize it
     -->
   <script webfunding type="application/json">
       [
@@ -33,11 +33,11 @@
       ]
     </script>
 
-  <script src="../../dist/fundme-iife.js"></script>
+  <script src="../../dist/webfunding-iife.js"></script>
   <script>
-    fundme.fund()
+    webfunding.fund()
 
-    // code below are optional, just to show that fundme is working
+    // code below are optional, just to show that webfunding is working
     if (document.monetization) {
       const address = document.querySelector('meta[name="monetization"]').content
       document.getElementById('text').innerText = `Browser is streaming to ${address}`

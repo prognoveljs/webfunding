@@ -35,8 +35,8 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-function FundmeError(err) {
-  return "Fundme.js: " + err;
+function WebfundingError(err) {
+  return "Webfunding.js: " + err;
 }
 var addressNotFound = "address not found.";
 var addressIsNotAString = "address must be a string.";
@@ -57,9 +57,9 @@ var metaTagMultipleIsFound = 'multiple <meta name="monetization" /> found - Web 
 var noTemplateFound = "no monetization template is found.";
 var failParsingTemplate = "fails to parse address from <template data-fund></template>.";
 
-var cannotParseScriptJson = "cannot parse JSON from <script fundme>. Make sure it contains a valid JSON.";
-var jsonTemplateIsInvalid = "found <script fundme> but it's not valid.";
-var scriptFundmeIsNotApplicationJson = 'found <script fundme> but its type is not "application/json"'; // relative weight
+var cannotParseScriptJson = "cannot parse JSON from <script webfunding>. Make sure it contains a valid JSON.";
+var jsonTemplateIsInvalid = "found <script webfunding> but it's not valid.";
+var scriptWebfundingIsNotApplicationJson = 'found <script webfunding> but its type is not "application/json"'; // relative weight
 
 var paymentPointersMustHaveAtLeastOneFixedPointer = "revenue sharing payment pointers must have at least one payment address pointer with fixed weight.";
 var relativeWeightChanceError = "error when calculating total relative weight chance. Make sure it's a float between 0~1.0.";
@@ -82,7 +82,7 @@ var splitFundError = "must set web monetization pointer address with fund() befo
  *****************************/
 
 var noUndefinedFundOnServerSide = "can't use fund() with empty parameters in server side.";
-var invalidFundmeServerSide = "invalid fundme on the server-side.";
+var invalidWebfundingServerSide = "invalid webfunding on the server-side.";
 
 var relativeWeightPointers = [];
 var fixedWeightPointers = [];
@@ -106,7 +106,7 @@ function calculateRelativeWeight(pool) {
   var relativeWeightPointers;
   relativeWeightPointers = pool.filter(filterRelativeWeight); // console.log(relativeWeightPointers);
 
-  if (!fixedWeightPointers.length) throw FundmeError(paymentPointersMustHaveAtLeastOneFixedPointer);
+  if (!fixedWeightPointers.length) throw WebfundingError(paymentPointersMustHaveAtLeastOneFixedPointer);
   return [].concat(_toConsumableArray(normalizeFixedPointers(fixedWeightPointers, totalRelativeChance)), _toConsumableArray(normalizeRelativePointers(relativeWeightPointers)));
 }
 function filterRelativeWeight(pointer) {
@@ -117,7 +117,7 @@ function filterRelativeWeight(pointer) {
     var convertedWeight = weight.slice(0, -1);
 
     if (!isNumberOnly(convertedWeight)) {
-      throw FundmeError(invalidRelativeWeight(pointer.address));
+      throw WebfundingError(invalidRelativeWeight(pointer.address));
     }
 
     registerRelativeWeight(pointer);
@@ -129,7 +129,7 @@ function filterRelativeWeight(pointer) {
     return false;
   }
 
-  throw FundmeError(invalidWeight(pointer.address, weight));
+  throw WebfundingError(invalidWeight(pointer.address, weight));
 }
 function registerRelativeWeight(pointer) {
   pointer.weight = getRelativeWeight(pointer);
@@ -143,7 +143,7 @@ function registerFixedWeight(pointer) {
   fixedWeightPointers.push(pointer);
 }
 function normalizeFixedPointers(pool, chance) {
-  if (chance > 1 || chance === NaN) throw FundmeError(relativeWeightChanceError);
+  if (chance > 1 || chance === NaN) throw WebfundingError(relativeWeightChanceError);
   chance = 1 - chance; // decrease all fixed pointer weights
   // based on total relative chance registered
 
@@ -176,18 +176,18 @@ function getRelativeWeight(pointer) {
     if (pointer.endsWith("%")) {
       chance = parseFloat(weight) / 100;
     } else {
-      throw FundmeError(relativeWeightMustEndsWithPercentage);
+      throw WebfundingError(relativeWeightMustEndsWithPercentage);
     }
   } else {
     if (!pointer.weight) {
-      throw FundmeError(weightForRelativePointerNotFound(pointer.address));
+      throw WebfundingError(weightForRelativePointerNotFound(pointer.address));
     }
 
     if (typeof pointer.weight === "string") {
-      if (!pointer.weight.endsWith("%")) throw FundmeError(relativeWeightMustEndsWithPercentage);
+      if (!pointer.weight.endsWith("%")) throw WebfundingError(relativeWeightMustEndsWithPercentage);
       pointer.weight = parseFloat(pointer.weight);
     } else {
-      throw FundmeError(invalidRelativeWeight(pointer.address));
+      throw WebfundingError(invalidRelativeWeight(pointer.address));
     }
 
     chance = pointer.weight / 100;
@@ -217,9 +217,9 @@ function getPointerAddress(pointer) {
   var address = pointer.address;
 
   if (!address) {
-    throw FundmeError(addressNotFound);
+    throw WebfundingError(addressNotFound);
   } else if (typeof address !== "string") {
-    throw FundmeError(addressIsNotAString);
+    throw WebfundingError(addressIsNotAString);
   }
 
   return address;
@@ -228,7 +228,7 @@ function createPool(pointers) {
   return pointers.map(function (pointer) {
     var wmPointer;
     if (typeof pointer === "string") pointer = convertToPointer(pointer);
-    if (!hasAddress(pointer)) throw FundmeError(addressNotFound);
+    if (!hasAddress(pointer)) throw WebfundingError(addressNotFound);
     wmPointer = checkWeight(pointer);
     return wmPointer;
   });
@@ -313,7 +313,7 @@ function getWinningPointer(pointers, choice) {
     var _weight = (_pointers$pointer$wei = pointers[pointer].weight) !== null && _pointers$pointer$wei !== void 0 ? _pointers$pointer$wei : DEFAULT_WEIGHT; // TODO - safecheck null assertion
 
 
-    if (typeof _weight !== "number") throw FundmeError(getWinningPointerMustBeANumber);
+    if (typeof _weight !== "number") throw WebfundingError(getWinningPointerMustBeANumber);
 
     if ((choice -= _weight) <= 0) {
       return pointers[pointer];
@@ -339,7 +339,7 @@ function setDefaultAddress(address) {
       defaultAddress = createPool(address);
       return;
     } else {
-      throw FundmeError(defaultAddressArrayCannotBeEmpty);
+      throw WebfundingError(defaultAddressArrayCannotBeEmpty);
     }
   }
 
@@ -360,7 +360,7 @@ function setDefaultAddress(address) {
     return;
   }
 
-  throw FundmeError(invalidDefaultAddress);
+  throw WebfundingError(invalidDefaultAddress);
 }
 function getDefaultAddress() {
   return defaultAddress;
@@ -383,24 +383,24 @@ function getCurrentPointerAddress() {
     var metaTag = document.head.querySelectorAll('meta[name="monetization"]');
 
     if (metaTag.length > 1) {
-      throw FundmeError(metaTagMultipleIsFound);
+      throw WebfundingError(metaTagMultipleIsFound);
     }
 
     if (metaTag[0]) {
       return metaTag[0].content;
     }
 
-    throw FundmeError(metaTagNotFound);
+    throw WebfundingError(metaTagNotFound);
   } else {
     if (currentPointer) return currentPointer.toString();
-    throw FundmeError(getCurrentPointerAddressMustClientSide);
+    throw WebfundingError(getCurrentPointerAddressMustClientSide);
   }
 }
 function cleanSinglePointerSyntax(pointer) {
   if (typeof pointer === "string") {
     pointer = pointer.split("#")[0];
   } else {
-    throw FundmeError(canOnlyCleanStringCustomSyntax);
+    throw WebfundingError(canOnlyCleanStringCustomSyntax);
   }
 
   return pointer;
@@ -437,9 +437,9 @@ function setPointerSingle(pointer) {
   return pointer;
 }
 
-var FUNDME_TEMPLATE_SELECTOR = "template[data-fund]";
-var FUNDME_CUSTOM_SYNTAX_SELECTOR = "template[fundme]";
-var FUNDME_JSON_SELECTOR = "script[fundme]";
+var WEBFUNDING_TEMPLATE_SELECTOR = "template[data-fund]";
+var WEBFUNDING_CUSTOM_SYNTAX_SELECTOR = "template[webfunding]";
+var WEBFUNDING_JSON_SELECTOR = "script[webfunding]";
 function setPointerFromTemplates() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var pointers = [].concat(_toConsumableArray(scrapeTemplate()), _toConsumableArray(scrapeJson()), _toConsumableArray(scrapeCustomSyntax()));
@@ -447,13 +447,13 @@ function setPointerFromTemplates() {
   if (pointers.length) {
     setPointerMultiple(pointers, options);
   } else {
-    throw FundmeError(noTemplateFound);
+    throw WebfundingError(noTemplateFound);
   }
 } // DON'T throw errors inside scrape functions if array is found to be empty
 // fund() already do that
 
 function scrapeJson() {
-  var scriptTags = document.body.querySelectorAll(FUNDME_JSON_SELECTOR);
+  var scriptTags = document.body.querySelectorAll(WEBFUNDING_JSON_SELECTOR);
   var pointers = [];
 
   if (scriptTags.length) {
@@ -472,11 +472,11 @@ function parseScriptJson(json) {
   try {
     parsed = JSON.parse(json.innerHTML);
   } catch (err) {
-    throw FundmeError(cannotParseScriptJson);
+    throw WebfundingError(cannotParseScriptJson);
   }
 
   if (json.type !== "application/json") {
-    throw FundmeError(scriptFundmeIsNotApplicationJson);
+    throw WebfundingError(scriptWebfundingIsNotApplicationJson);
   }
 
   if (Array.isArray(parsed)) {
@@ -484,14 +484,14 @@ function parseScriptJson(json) {
   } else if (typeof parsed === "string") {
     pointers = createPool([parsed]);
   } else {
-    throw FundmeError(jsonTemplateIsInvalid);
+    throw WebfundingError(jsonTemplateIsInvalid);
   }
 
   return pointers;
 }
 
 function scrapeTemplate() {
-  var templates = document.body.querySelectorAll(FUNDME_TEMPLATE_SELECTOR);
+  var templates = document.body.querySelectorAll(WEBFUNDING_TEMPLATE_SELECTOR);
   var pointers = [];
 
   if (templates.length) {
@@ -510,7 +510,7 @@ function parseTemplate(template) {
   var weight = (_template$dataset$fun = template.dataset.fundWeight) !== null && _template$dataset$fun !== void 0 ? _template$dataset$fun : DEFAULT_WEIGHT;
 
   if (!address) {
-    throw FundmeError(failParsingTemplate);
+    throw WebfundingError(failParsingTemplate);
   }
 
   var pointer = checkWeight({
@@ -520,7 +520,7 @@ function parseTemplate(template) {
   return pointer;
 }
 function scrapeCustomSyntax() {
-  var templates = document.querySelectorAll(FUNDME_CUSTOM_SYNTAX_SELECTOR);
+  var templates = document.querySelectorAll(WEBFUNDING_CUSTOM_SYNTAX_SELECTOR);
   var pointers = [];
 
   if (templates.length) {
@@ -551,7 +551,7 @@ function clientSideFund(pointer, options) {
   }
 
   if (options && options.force === "server") {
-    throw FundmeError(invalidFundmeServerSide);
+    throw WebfundingError(invalidWebfundingServerSide);
   }
 
   if (typeof pointer === "string") {
@@ -565,7 +565,7 @@ function clientSideFund(pointer, options) {
 
         return setFundType(FundType.isDefault);
       } else {
-        throw FundmeError(defaultAddressNotFound);
+        throw WebfundingError(defaultAddressNotFound);
       }
     }
 
@@ -578,7 +578,7 @@ function clientSideFund(pointer, options) {
     return setFundType(FundType.isMultiple);
   }
 
-  throw FundmeError(invalidAddress);
+  throw WebfundingError(invalidAddress);
 }
 var forceBrowser = false;
 var isNode = typeof process !== "undefined" && process.versions != null && process.versions.node != null;
@@ -591,7 +591,7 @@ var isBrowser = function isBrowser() {
 };
 
 function serverSideFund(pointer) {
-  if (pointer === null || pointer === undefined) throw FundmeError(noUndefinedFundOnServerSide);
+  if (pointer === null || pointer === undefined) throw WebfundingError(noUndefinedFundOnServerSide);
 
   if (typeof pointer === "string") {
     return setPointerSingle(pointer).toString();
@@ -601,7 +601,7 @@ function serverSideFund(pointer) {
     return setPointerMultiple(pointer).toString();
   }
 
-  throw FundmeError(invalidFundmeServerSide);
+  throw WebfundingError(invalidWebfundingServerSide);
 }
 
 var FundType;
@@ -621,7 +621,7 @@ function fund(pointer) {
     return clientSideFund(pointer, options);
   } else {
     if (pointer === undefined) {
-      throw FundmeError(noUndefinedFundOnServerSide);
+      throw WebfundingError(noUndefinedFundOnServerSide);
     } else {
       return serverSideFund(pointer);
     }
@@ -633,7 +633,7 @@ function splitFund(amount) {
   var sum = 0;
 
   if (!pool.length) {
-    throw FundmeError(splitFundError);
+    throw WebfundingError(splitFundError);
   } else {
     // process pointer pool
     pool = calculateRelativeWeight(pool);
