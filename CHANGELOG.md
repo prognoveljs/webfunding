@@ -1,5 +1,9 @@
 # Releases
 
+## 0.2.0
+
+- Migrate to webfunding repo
+
 ## 0.1.8
 
 - New site added to package.json.
