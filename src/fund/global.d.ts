@@ -9,6 +9,11 @@ interface WMPointer {
   weight?: weight;
 }
 
+interface WMPointerStats {
+  address: string;
+  chance: number;
+}
+
 interface fundOptions {
   force?: "client" | "server";
   maxPool?: number;

@@ -11,7 +11,7 @@ function _arrayWithoutHoles(arr) {
 }
 
 function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
 
 function _unsupportedIterableToArray(o, minLen) {
@@ -74,7 +74,7 @@ var invalidWeight = function invalidWeight(address, weight) {
   return "weight for payment pointer ".concat(address, "#").concat(weight, " is invalid.");
 }; // split fund
 
-var splitFundError = "must set web monetization pointer address with fund() before split.";
+var splitFundError = "must set web monetization pointer address with fund() before split."; // stats
 /*****************************
  *                           *
  *  Server-side fund()       *

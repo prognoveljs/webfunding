@@ -10,7 +10,7 @@ var webfunding = (function (exports) {
   }
 
   function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 
   function _unsupportedIterableToArray(o, minLen) {
@@ -73,7 +73,7 @@ var webfunding = (function (exports) {
     return "weight for payment pointer ".concat(address, "#").concat(weight, " is invalid.");
   }; // split fund
 
-  var splitFundError = "must set web monetization pointer address with fund() before split.";
+  var splitFundError = "must set web monetization pointer address with fund() before split."; // stats
   /*****************************
    *                           *
    *  Server-side fund()       *
@@ -654,6 +654,8 @@ var webfunding = (function (exports) {
   exports.getCurrentPointerPool = getCurrentPointerPool;
   exports.setDefaultAddress = setDefaultAddress;
   exports.splitFund = splitFund;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
   return exports;
 
