@@ -31,6 +31,7 @@ export function clear() {
 
 export function calculateRelativeWeight(pool: WMPointer[]): WMPointer[] {
   clear();
+  pool = JSON.parse(JSON.stringify(pool)); // fix mutating original object
   pointerPoolSum = getPoolWeightSum(pool);
   let relativeWeightPointers;
 

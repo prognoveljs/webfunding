@@ -24,7 +24,7 @@ export function getPaymentPointerSharePercentage(
   if (!pointer) return 0;
   if (!pointer.weight) throw WebfundingError(getStatsPercentageErrorPointerIsUndefined);
 
-  return (pointer.weight as number) / sum;
+  return (pointer.weight as number) / sum
 }
 
 export function createWebfundingLeaderboard(
