@@ -1,6 +1,6 @@
 import { getStatsPercentageErrorPointerIsUndefined, WebfundingError } from "./errors";
 import { calculateRelativeWeight } from "./relative-weight";
-import { createPool } from "./set-pointer-multiple";
+import { createPool, DEFAULT_WEIGHT } from "./set-pointer-multiple";
 import { getCurrentPointerPool, getPoolWeightSum } from "./utils";
 
 export function getPaymentPointerSharePercentage(
@@ -40,7 +40,7 @@ export function createWebfundingLeaderboard(
   const leaderboard = pool.reduce((prev: WMPointerStats[], cur: WMPointer): WMPointerStats[] => {
     prev.push({
       address: cur.address,
-      chance: (cur.weight as number || 1) / sum
+      chance: (cur.weight as number || DEFAULT_WEIGHT) / sum
     })
     return prev;
   }, [] as WMPointerStats[]);
