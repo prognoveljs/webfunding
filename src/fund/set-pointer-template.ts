@@ -37,9 +37,8 @@ export function setPointerFromTemplates(options: fundOptions = {}): void {
 // DON'T throw errors inside scrape functions if array is found to be empty
 // fund() already do that
 export function scrapeJson(): WMPointer[] {
-  const scriptTags: NodeListOf<HTMLScriptElement> = document.body.querySelectorAll(
-    WEBFUNDING_JSON_SELECTOR,
-  );
+  const scriptTags: NodeListOf<HTMLScriptElement> =
+    document.body.querySelectorAll(WEBFUNDING_JSON_SELECTOR);
   let pointers: WMPointer[] = [];
 
   if (scriptTags.length) {

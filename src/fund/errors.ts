@@ -64,8 +64,8 @@ export const invalidWeight = (address: string, weight: string | number | undefin
 export const splitFundError = `must set web monetization pointer address with fund() before split.`;
 
 // stats
-export const getStatsPercentageErrorPointerIsUndefined = `Failed to get payment pointer percentage stats. Pointer is invalid or undefined.`
-export const getStatsPercentageErrorWeightIsUndefined = `Failed to get payment pointer percentage stats. Weight is invalid or undefined.`
+export const getStatsPercentageErrorPointerIsUndefined = `Failed to get payment pointer percentage stats. Pointer is invalid or undefined.`;
+export const getStatsPercentageErrorWeightIsUndefined = `Failed to get payment pointer percentage stats. Weight is invalid or undefined.`;
 
 /*****************************
  *                           *
