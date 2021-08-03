@@ -3,6 +3,7 @@
 ## 0.2.0
 
 - Migrate to webfunding repo
+- Allow `getPaymentPointerSharePercentage` and `createWebfundingLeaderboard` to get revenue share stats among contributors.
 
 ## 0.1.8
 
