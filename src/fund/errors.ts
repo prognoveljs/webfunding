@@ -64,8 +64,12 @@ export const invalidWeight = (address: string, weight: string | number | undefin
 export const splitFundError = `must set web monetization pointer address with fund() before split.`;
 
 // stats
-export const getStatsPercentageErrorPointerIsUndefined = `Failed to get payment pointer percentage stats. Pointer is invalid or undefined.`;
-export const getStatsPercentageErrorWeightIsUndefined = `Failed to get payment pointer percentage stats. Weight is invalid or undefined.`;
+export const getStatsPercentageErrorPointerIsUndefined = `get revshare stats failed to get payment pointer percentage stats. Pointer is invalid or undefined.`;
+export const getStatsPercentageErrorWeightIsUndefined = `get revshare stats failed to get payment pointer percentage stats. Weight is invalid or undefined.`;
+export const getStatsPercentageErrorGettingCurrentPool = `get revshare stats failed to get current payment pointer pool.`;
+export const getStatsPercentageErrorCalculatingWeightSum = `get revshare stats failed to calculate payment pointer chance sum.`;
+export const getStatsPercentageErrorCalculatingRelativeWeight = `get revshare stats failed to calculate relative weight.`;
+export const getStatsPercentageErrorPickingAddress = `get revshare stats failed when picking address in pointer pool array.`;
 
 /*****************************
  *                           *
