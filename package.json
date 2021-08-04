@@ -1,6 +1,6 @@
 {
   "name": "webfunding",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A simple but powerful client-side library to manage monetization on the web.",
   "dependencies": {
     "browser-or-node": "^1.3.0"
@@ -48,7 +48,7 @@
   "homepage": "https://prognovel.gitbook.io/fundme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ProgNovel/fundme.git"
+    "url": "https://github.com/prognovejs/webfunding.git"
   },
   "keywords": [
     "Web Monetization API",
