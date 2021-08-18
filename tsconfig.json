@@ -5,6 +5,7 @@
     "module": "esnext",
     "strict": true,
     "target": "esnext",
+    "moduleResolution": "node",
     "declaration": true
   },
   "include": ["src/**/*", "src/fund/global.d.ts"],
