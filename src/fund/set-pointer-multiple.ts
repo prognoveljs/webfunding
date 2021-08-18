@@ -69,9 +69,7 @@ export function pickPointer(pointers: WMPointer[]): WMPointer {
 }
 
 export function getChoice(sum: number): number {
-  const choice: number = Math.random() * sum;
-
-  return choice;
+  return Math.random() * sum;
 }
 
 export function convertToPointer(str: string): WMPointer {
