@@ -11,6 +11,7 @@ import {
   invalidDefaultAddress,
   getWinningPointerMustBeANumber,
 } from "./errors";
+import { getReceiptURL } from "./verfier";
 
 export function isMultiplePointer(s: any): boolean {
   return Array.isArray(s);
