@@ -4,12 +4,30 @@ import { getCurrentPointerAddress } from "./utils";
 
 const IDB_REFERRER_KEY: string = "referrer";
 const IDB_DYNAMIC_REVSHARE_DB_NAME: string = "dynamic-revshare";
+
 interface DynamicRevshareFactory {
   // referrer: string;
   setReferrer: (referrer: string, chance: number) => Promise<void>;
+  /**
+   * Setup referrers' data from remote REST API.
+   * Remote API must return an array of valid Webfunding string or object.
+   * Useful if combined with persistent remote database and user auth scheme since browsers can wipeout
+   * local database at any time.
+   */
   setRemoteData: (url: string, headers?: any) => Promise<void>;
+  /**
+   *
+   */
   load: () => Promise<string[]>;
-  syncRoute: (route: string, opts?: { forceWebfundingRestart: boolean }) => void;
+  /**
+   * Sync dynamic revshare referrers of under this key with the current route.
+   * Leave `route` parameter empty to let Webfunding sync to the current
+   * webpage's location under this dynamic revshare instance is being setup.
+   */
+  syncRoute: (route?: string, opts?: { forceWebfundingRestart: boolean }) => void;
+  /**
+   * Clear all referrers' data from this dynamic revshare instance from browsers' local database.
+   */
   clear: () => Promise<void>;
 }
 
@@ -18,9 +36,10 @@ export let currentWebfundingReferrer: string | undefined;
 export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
   const store = createStore(IDB_DYNAMIC_REVSHARE_DB_NAME, key);
   return {
-    setReferrer: async function (referrer: string, chance: number) {
+    setReferrer: async function (referrerWebfundingPointer: WMPointer) {
       // TODO - make webfunding syntax as default parameter and dissect it
-      set(referrer, chance, store);
+      const { address, weight } = referrerWebfundingPointer;
+      set(address, weight, store);
     },
     setRemoteData: async function (url: string, headers?: any) {
       try {
@@ -30,7 +49,7 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
         const data = await response.json();
 
         // TODO - allow setReferrer of an array
-        this.setReferrer;
+        this.setReferrer_;
       } catch (err) {
         throw new Error(err);
       }
