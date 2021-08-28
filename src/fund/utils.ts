@@ -16,29 +16,30 @@ export function isMultiplePointer(s: any): boolean {
   return Array.isArray(s);
 }
 
-export function setWebMonetizationPointer(address: string): HTMLMetaElement {
+export function setWebMonetizationPointer(address: string, opts?: fundOptions): HTMLMetaElement {
   let wmAddress = document.head.querySelector('meta[name="monetization"]')! as HTMLMetaElement;
 
-  return setWebMonetizationTag(wmAddress, address);
+  return setWebMonetizationTag(wmAddress, address, opts);
 }
 
 export function setWebMonetizationTag(
   wmAddress: HTMLMetaElement,
   address: string,
+  opts?: fundOptions,
 ): HTMLMetaElement {
   if (!wmAddress) {
-    wmAddress = createWebMonetizationTag(address);
+    wmAddress = createWebMonetizationTag(address, opts);
   } else {
-    wmAddress.content = address;
+    wmAddress.content = getReceiptURL(address, opts?.receiptVerifierService || "");
   }
 
   return wmAddress;
 }
 
-export function createWebMonetizationTag(address: string): HTMLMetaElement {
+export function createWebMonetizationTag(address: string, opts?: fundOptions): HTMLMetaElement {
   const wmAddress = document.createElement("meta");
   wmAddress.name = "monetization";
-  wmAddress.content = address;
+  wmAddress.content = getReceiptURL(address, opts?.receiptVerifierService || "");
   document.head.appendChild(wmAddress);
 
   return wmAddress;

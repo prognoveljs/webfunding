@@ -2,6 +2,7 @@ import { fund } from "./fund";
 
 class WebMonetization {
   public currentPool: WMPointer[] = [];
+  receiptVerifierServiceEndpoint: string = "$webmonetization.org/api/receipts/";
 
   constructor(opts?: any) {}
 
@@ -18,7 +19,9 @@ class WebMonetization {
 
   start(): void {
     try {
-      fund(this.currentPool);
+      fund(this.currentPool, {
+        receiptVerifierService: this.receiptVerifierServiceEndpoint,
+      });
     } catch (error) {
       console.warn(error);
     }

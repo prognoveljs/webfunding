@@ -6,7 +6,7 @@ export function setPointerSingle(pointer: string, options: fundOptions = {}): re
   setCurrentPointer(pointer);
 
   if (isBrowser(options)) {
-    return setWebMonetizationPointer(pointer);
+    return setWebMonetizationPointer(pointer, options);
   }
 
   return pointer;

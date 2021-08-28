@@ -20,11 +20,16 @@ interface fundOptions {
   default?: boolean;
   affiliateId?: string;
   isAffiliateEntry?: boolean;
+  receiptVerifierService?: string;
 }
 
 interface defaultAddressOptions {
   allowUndefined?: boolean;
 }
+
+type WebMonetization = {
+  currentPool: WMPointer[];
+};
 
 // declare var document: any;
 // declare var window: any;
