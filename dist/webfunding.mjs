@@ -71,6 +71,12 @@ var invalidWeight = function invalidWeight(address, weight) {
 }; // split fund
 
 var splitFundError = "must set web monetization pointer address with fund() before split."; // stats
+
+var getStatsPercentageErrorPointerIsUndefined = "get revshare stats failed to get payment pointer percentage stats. Pointer is invalid or undefined.";
+var getStatsPercentageErrorGettingCurrentPool = "get revshare stats failed to get current payment pointer pool.";
+var getStatsPercentageErrorCalculatingWeightSum = "get revshare stats failed to calculate payment pointer chance sum.";
+var getStatsPercentageErrorCalculatingRelativeWeight = "get revshare stats failed to calculate relative weight.";
+var getStatsPercentageErrorPickingAddress = "get revshare stats failed when picking address in pointer pool array.";
 /*****************************
  *                           *
  *  Server-side fund()       *
@@ -98,6 +104,8 @@ function clear() {
 }
 function calculateRelativeWeight(pool) {
   clear();
+  pool = JSON.parse(JSON.stringify(pool)); // fix mutating original object
+
   pointerPoolSum = getPoolWeightSum(pool);
   var relativeWeightPointers;
   relativeWeightPointers = pool.filter(filterRelativeWeight); // console.log(relativeWeightPointers);
@@ -204,7 +212,7 @@ function setPointerMultiple(pointers) {
   setCurrentPointer(pool);
 
   if (isBrowser(options)) {
-    return setWebMonetizationPointer(pointerAddress);
+    return setWebMonetizationPointer(pointerAddress, options);
   }
 
   return pointerAddress;
@@ -244,8 +252,7 @@ function pickPointer(pointers) {
   return getWinningPointer(pointers, choice);
 }
 function getChoice(sum) {
-  var choice = Math.random() * sum;
-  return choice;
+  return Math.random() * sum;
 }
 function convertToPointer(str) {
   var address = str;
@@ -264,26 +271,32 @@ function convertToPointer(str) {
   return checkWeight(pointer);
 }
 
+function getReceiptURL(url, verifyServiceEndpoint) {
+  if (!verifyServiceEndpoint) return url;
+  if (verifyServiceEndpoint.substring(-1) !== "/") verifyServiceEndpoint += "/";
+  return verifyServiceEndpoint + encodeURIComponent(url);
+}
+
 function isMultiplePointer(s) {
   return Array.isArray(s);
 }
-function setWebMonetizationPointer(address) {
+function setWebMonetizationPointer(address, opts) {
   var wmAddress = document.head.querySelector('meta[name="monetization"]');
-  return setWebMonetizationTag(wmAddress, address);
+  return setWebMonetizationTag(wmAddress, address, opts);
 }
-function setWebMonetizationTag(wmAddress, address) {
+function setWebMonetizationTag(wmAddress, address, opts) {
   if (!wmAddress) {
-    wmAddress = createWebMonetizationTag(address);
+    wmAddress = createWebMonetizationTag(address, opts);
   } else {
-    wmAddress.content = address;
+    wmAddress.content = getReceiptURL(address, (opts === null || opts === void 0 ? void 0 : opts.receiptVerifierService) || "");
   }
 
   return wmAddress;
 }
-function createWebMonetizationTag(address) {
+function createWebMonetizationTag(address, opts) {
   var wmAddress = document.createElement("meta");
   wmAddress.name = "monetization";
-  wmAddress.content = address;
+  wmAddress.content = getReceiptURL(address, (opts === null || opts === void 0 ? void 0 : opts.receiptVerifierService) || "");
   document.head.appendChild(wmAddress);
   return wmAddress;
 }
@@ -427,7 +440,7 @@ function setPointerSingle(pointer) {
   setCurrentPointer(pointer);
 
   if (isBrowser(options)) {
-    return setWebMonetizationPointer(pointer);
+    return setWebMonetizationPointer(pointer, options);
   }
 
   return pointer;
@@ -646,4 +659,60 @@ function splitFund(amount) {
   });
 }
 
-export { fund, getCurrentPointerAddress, getCurrentPointerPool, setDefaultAddress, splitFund };
+function getPaymentPointerSharePercentage(address, opts) {
+  var pool;
+  var sum;
+  if (opts !== null && opts !== void 0 && opts.calculatedPool) pool = opts.calculatedPool;
+  if (!pool && opts !== null && opts !== void 0 && opts.rawPool) pool = opts.rawPool;
+
+  try {
+    if (!pool) pool = createPool(getCurrentPointerPool());
+  } catch (error) {
+    throw WebfundingError(getStatsPercentageErrorGettingCurrentPool);
+  }
+
+  try {
+    sum = (opts === null || opts === void 0 ? void 0 : opts.poolSum) || getPoolWeightSum(pool);
+  } catch (error) {
+    throw WebfundingError(getStatsPercentageErrorCalculatingWeightSum);
+  }
+
+  try {
+    pool = calculateRelativeWeight(pool);
+  } catch (error) {
+    throw WebfundingError(getStatsPercentageErrorCalculatingRelativeWeight);
+  }
+
+  var pointer;
+
+  try {
+    pointer = pool.find(function (pointer) {
+      return pointer.address === address;
+    });
+  } catch (error) {
+    throw WebfundingError(getStatsPercentageErrorPickingAddress);
+  }
+
+  if (!pointer) return 0;
+  if (!pointer.weight) throw WebfundingError(getStatsPercentageErrorPointerIsUndefined);
+  return pointer.weight / sum;
+}
+function createWebfundingLeaderboard(pool, opts) {
+  if (!pool) pool = createPool(getCurrentPointerPool());
+  pool = calculateRelativeWeight(pool);
+  var sum = getPoolWeightSum(pool);
+  var leaderboard = pool.reduce(function (prev, cur) {
+    prev.push({
+      address: cur.address,
+      chance: (cur.weight || DEFAULT_WEIGHT) / sum
+    });
+    return prev;
+  }, []);
+  return opts !== null && opts !== void 0 && opts.ascending ? leaderboard.sort(function (a, b) {
+    return a.chance - b.chance;
+  }) : leaderboard.sort(function (a, b) {
+    return b.chance - a.chance;
+  });
+}
+
+export { createWebfundingLeaderboard, fund, getCurrentPointerAddress, getCurrentPointerPool, getPaymentPointerSharePercentage, setDefaultAddress, splitFund };

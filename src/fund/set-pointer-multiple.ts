@@ -23,7 +23,7 @@ export function setPointerMultiple(
   setCurrentPointer(pool);
 
   if (isBrowser(options)) {
-    return setWebMonetizationPointer(pointerAddress);
+    return setWebMonetizationPointer(pointerAddress, options);
   }
 
   return pointerAddress;
