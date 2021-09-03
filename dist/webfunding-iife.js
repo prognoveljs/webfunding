@@ -1,111 +1,14 @@
-var webfunding = (function (exports) {
+var webfunding = (function (exports, _toConsumableArray, _classCallCheck, _createClass, _defineProperty, _asyncToGenerator, _regeneratorRuntime) {
   'use strict';
 
-  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-    try {
-      var info = gen[key](arg);
-      var value = info.value;
-    } catch (error) {
-      reject(error);
-      return;
-    }
+  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-    if (info.done) {
-      resolve(value);
-    } else {
-      Promise.resolve(value).then(_next, _throw);
-    }
-  }
-
-  function _asyncToGenerator(fn) {
-    return function () {
-      var self = this,
-          args = arguments;
-      return new Promise(function (resolve, reject) {
-        var gen = fn.apply(self, args);
-
-        function _next(value) {
-          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-        }
-
-        function _throw(err) {
-          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-        }
-
-        _next(undefined);
-      });
-    };
-  }
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
-  }
-
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
-
-    return obj;
-  }
-
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-  }
-
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-  }
-
-  function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
-  }
-
-  function _unsupportedIterableToArray(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-  }
-
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-
-    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
-
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
+  var _toConsumableArray__default = /*#__PURE__*/_interopDefaultLegacy(_toConsumableArray);
+  var _classCallCheck__default = /*#__PURE__*/_interopDefaultLegacy(_classCallCheck);
+  var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
+  var _defineProperty__default = /*#__PURE__*/_interopDefaultLegacy(_defineProperty);
+  var _asyncToGenerator__default = /*#__PURE__*/_interopDefaultLegacy(_asyncToGenerator);
+  var _regeneratorRuntime__default = /*#__PURE__*/_interopDefaultLegacy(_regeneratorRuntime);
 
   function WebfundingError(err) {
     return "Webfunding.js: " + err;
@@ -187,7 +90,7 @@ var webfunding = (function (exports) {
     relativeWeightPointers = pool.filter(filterRelativeWeight); // console.log(relativeWeightPointers);
 
     if (!fixedWeightPointers.length) throw WebfundingError(paymentPointersMustHaveAtLeastOneFixedPointer);
-    return [].concat(_toConsumableArray(normalizeFixedPointers(fixedWeightPointers, totalRelativeChance)), _toConsumableArray(normalizeRelativePointers(relativeWeightPointers)));
+    return [].concat(_toConsumableArray__default['default'](normalizeFixedPointers(fixedWeightPointers, totalRelativeChance)), _toConsumableArray__default['default'](normalizeRelativePointers(relativeWeightPointers)));
   }
   function filterRelativeWeight(pointer) {
     if (pointer.weight === undefined) return false;
@@ -527,7 +430,7 @@ var webfunding = (function (exports) {
   var WEBFUNDING_JSON_SELECTOR = "script[webfunding]";
   function setPointerFromTemplates() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var pointers = [].concat(_toConsumableArray(scrapeTemplate()), _toConsumableArray(scrapeJson()), _toConsumableArray(scrapeCustomSyntax()));
+    var pointers = [].concat(_toConsumableArray__default['default'](scrapeTemplate()), _toConsumableArray__default['default'](scrapeJson()), _toConsumableArray__default['default'](scrapeCustomSyntax()));
 
     if (pointers.length) {
       setPointerMultiple(pointers, options);
@@ -582,7 +485,7 @@ var webfunding = (function (exports) {
     if (templates.length) {
       templates.forEach(function (template) {
         var pointer = parseTemplate(template);
-        pointers = [].concat(_toConsumableArray(pointers), [pointer]);
+        pointers = [].concat(_toConsumableArray__default['default'](pointers), [pointer]);
       });
     }
 
@@ -610,7 +513,7 @@ var webfunding = (function (exports) {
 
     if (templates.length) {
       templates.forEach(function (template) {
-        pointers = [].concat(_toConsumableArray(pointers), _toConsumableArray(parseCustomSyntax(template)));
+        pointers = [].concat(_toConsumableArray__default['default'](pointers), _toConsumableArray__default['default'](parseCustomSyntax(template)));
       });
     }
 
@@ -623,7 +526,7 @@ var webfunding = (function (exports) {
       var strippedString = str.replace(/(^\s+|\s+$)/g, "");
 
       if (strippedString) {
-        pointers = [].concat(_toConsumableArray(pointers), [convertToPointer(strippedString)]);
+        pointers = [].concat(_toConsumableArray__default['default'](pointers), [convertToPointer(strippedString)]);
       }
     });
     return pointers;
@@ -877,10 +780,10 @@ var webfunding = (function (exports) {
     var store = createStore(IDB_DYNAMIC_REVSHARE_DB_NAME, IDB_REFERRER_KEY);
     return {
       setReferrer: function () {
-        var _setReferrer = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(pointer) {
+        var _setReferrer = _asyncToGenerator__default['default']( /*#__PURE__*/_regeneratorRuntime__default['default'].mark(function _callee(pointer) {
           var _pointer, address, weight;
 
-          return regeneratorRuntime.wrap(function _callee$(_context) {
+          return _regeneratorRuntime__default['default'].wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
@@ -935,8 +838,8 @@ var webfunding = (function (exports) {
         return setReferrer;
       }(),
       load: function () {
-        var _load = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        var _load = _asyncToGenerator__default['default']( /*#__PURE__*/_regeneratorRuntime__default['default'].mark(function _callee2() {
+          return _regeneratorRuntime__default['default'].wrap(function _callee2$(_context2) {
             while (1) {
               switch (_context2.prev = _context2.next) {
                 case 0:
@@ -995,8 +898,8 @@ var webfunding = (function (exports) {
         };
       },
       clear: function () {
-        var _clear = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-          return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        var _clear = _asyncToGenerator__default['default']( /*#__PURE__*/_regeneratorRuntime__default['default'].mark(function _callee3() {
+          return _regeneratorRuntime__default['default'].wrap(function _callee3$(_context3) {
             while (1) {
               switch (_context3.prev = _context3.next) {
                 case 0:
@@ -1022,13 +925,13 @@ var webfunding = (function (exports) {
 
   var WebMonetization = /*#__PURE__*/function () {
     function WebMonetization(opts) {
-      _classCallCheck(this, WebMonetization);
+      _classCallCheck__default['default'](this, WebMonetization);
 
-      _defineProperty(this, "currentPool", []);
+      _defineProperty__default['default'](this, "currentPool", []);
 
-      _defineProperty(this, "receiptVerifierServiceEndpoint", "$webmonetization.org/api/receipts/");
+      _defineProperty__default['default'](this, "receiptVerifierServiceEndpoint", "$webmonetization.org/api/receipts/");
 
-      _defineProperty(this, "affiliatePointer", {
+      _defineProperty__default['default'](this, "affiliatePointer", {
         affiliate: "affiliate",
         affiliateName: "affiliate-name",
         affiliateId: "affiliate-id"
@@ -1038,7 +941,7 @@ var webfunding = (function (exports) {
       return this;
     }
 
-    _createClass(WebMonetization, [{
+    _createClass__default['default'](WebMonetization, [{
       key: "set",
       value: function set(pointers) {
         this.currentPool = Array.isArray(pointers) ? pointers : [pointers];
@@ -1053,16 +956,16 @@ var webfunding = (function (exports) {
       key: "registerPaymentPointers",
       value: function registerPaymentPointers(pointers) {
         if (!Array.isArray(pointers)) pointers = [pointers];
-        this.currentPool = [].concat(_toConsumableArray(this.currentPool), _toConsumableArray(pointers));
+        this.currentPool = [].concat(_toConsumableArray__default['default'](this.currentPool), _toConsumableArray__default['default'](pointers));
         return this;
       }
     }, {
       key: "registerAffiliateReferrer",
       value: function registerAffiliateReferrer(id) {
-        var dynamic = setupDynamicRevshare(id);
+        var dynamicRevshare = setupDynamicRevshare(id);
 
-        var _dynamic$syncRoute = dynamic.syncRoute(),
-            affiliate = _dynamic$syncRoute.affiliate;
+        var _dynamicRevshare$sync = dynamicRevshare.syncRoute(),
+            affiliate = _dynamicRevshare$sync.affiliate;
 
         this.registerPaymentPointers(convertToPointer(affiliate));
         return this;
@@ -1102,4 +1005,4 @@ var webfunding = (function (exports) {
 
   return exports;
 
-}({}));
+}({}, _toConsumableArray, _classCallCheck, _createClass, _defineProperty, _asyncToGenerator, _regeneratorRuntime));
