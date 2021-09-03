@@ -1,33 +1,60 @@
+import { setupDynamicRevshare } from "./dynamic-revshare";
 import { fund } from "./fund";
+import { convertToPointer } from "./set-pointer-multiple";
 
-class WebMonetization {
+export class WebMonetization {
   public currentPool: WMPointer[] = [];
   receiptVerifierServiceEndpoint: string = "$webmonetization.org/api/receipts/";
-
-  constructor(opts?: any) {}
-
-  set(pointers: WMPointer | WMPointer[]): void {
-    this.currentPool = Array.isArray(pointers) ? pointers : [pointers];
+  private options: any;
+  private affiliatePointer = {
+    affiliate: "affiliate",
+    affiliateName: "affiliate-name",
+    affiliateId: "affiliate-id",
+  };
+  constructor(opts?: any) {
+    this.options = opts;
+    return this;
   }
 
-  add(pointers: WMPointer | WMPointer[]): void {
+  set(pointers: WMPointer | WMPointer[]): this {
+    this.currentPool = Array.isArray(pointers) ? pointers : [pointers];
+
+    return this;
+  }
+
+  add(pointers: WMPointer | WMPointer[]): this {
+    return this.registerPaymentPointers(pointers);
+  }
+
+  registerPaymentPointers(pointers: WMPointer | WMPointer[]): this {
     if (!Array.isArray(pointers)) pointers = [pointers];
     this.currentPool = [...this.currentPool, ...pointers];
+
+    return this;
   }
 
-  addAffiliateReferrer(pointers: WMPointer) {}
+  registerAffiliateReferrer(id: string): this {
+    const dynamicRevshare = setupDynamicRevshare(id);
 
-  start(): void {
+    const { affiliate } = dynamicRevshare.syncRoute();
+    this.registerPaymentPointers(convertToPointer(affiliate));
+
+    return this;
+  }
+
+  start(): this {
     try {
-      fund(this.currentPool, {
-        receiptVerifierService: this.receiptVerifierServiceEndpoint,
-      });
+      fund(this.currentPool, this.options);
     } catch (error) {
       console.warn(error);
     }
+
+    return this;
   }
 
-  reset(): void {
+  reset(): this {
     this.start();
+
+    return this;
   }
 }

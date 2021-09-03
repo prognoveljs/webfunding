@@ -1,3 +1,76 @@
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
 function _toConsumableArray(arr) {
   return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
@@ -90,7 +163,7 @@ var relativeWeightPointers = [];
 var fixedWeightPointers = [];
 var totalRelativeChance = 0;
 var pointerPoolSum = 0;
-function clear() {
+function clear$1() {
   relativeWeightPointers = [];
   fixedWeightPointers = [];
   totalRelativeChance = 0;
@@ -103,7 +176,7 @@ function clear() {
   };
 }
 function calculateRelativeWeight(pool) {
-  clear();
+  clear$1();
   pool = JSON.parse(JSON.stringify(pool)); // fix mutating original object
 
   pointerPoolSum = getPoolWeightSum(pool);
@@ -715,4 +788,302 @@ function createWebfundingLeaderboard(pool, opts) {
   });
 }
 
-export { createWebfundingLeaderboard, fund, getCurrentPointerAddress, getCurrentPointerPool, getPaymentPointerSharePercentage, setDefaultAddress, splitFund };
+/**
+ * https://bugs.webkit.org/show_bug.cgi?id=226547
+ * Safari has a horrible bug where IDB requests can hang while the browser is starting up.
+ * The only solution is to keep nudging it until it's awake.
+ * This probably creates garbage, but garbage is better than totally failing.
+ */
+function idbReady() {
+  var isSafari = !navigator.userAgentData && /Safari\//.test(navigator.userAgent) && !/Chrom(e|ium)\//.test(navigator.userAgent); // No point putting other browsers or older versions of Safari through this mess.
+
+  if (!isSafari || !indexedDB.databases) return Promise.resolve();
+  var intervalId;
+  return new Promise(function (resolve) {
+    var tryIdb = function tryIdb() {
+      return indexedDB.databases().finally(resolve);
+    };
+
+    intervalId = setInterval(tryIdb, 100);
+    tryIdb();
+  }).finally(function () {
+    return clearInterval(intervalId);
+  });
+}
+
+function promisifyRequest(request) {
+    return new Promise((resolve, reject) => {
+        // @ts-ignore - file size hacks
+        request.oncomplete = request.onsuccess = () => resolve(request.result);
+        // @ts-ignore - file size hacks
+        request.onabort = request.onerror = () => reject(request.error);
+    });
+}
+function createStore(dbName, storeName) {
+    const dbp = idbReady().then(() => {
+        const request = indexedDB.open(dbName);
+        request.onupgradeneeded = () => request.result.createObjectStore(storeName);
+        return promisifyRequest(request);
+    });
+    return (txMode, callback) => dbp.then((db) => callback(db.transaction(storeName, txMode).objectStore(storeName)));
+}
+let defaultGetStoreFunc;
+function defaultGetStore() {
+    if (!defaultGetStoreFunc) {
+        defaultGetStoreFunc = createStore('keyval-store', 'keyval');
+    }
+    return defaultGetStoreFunc;
+}
+/**
+ * Get a value by its key.
+ *
+ * @param key
+ * @param customStore Method to get a custom store. Use with caution (see the docs).
+ */
+function get(key, customStore = defaultGetStore()) {
+    return customStore('readonly', (store) => promisifyRequest(store.get(key)));
+}
+/**
+ * Set a value with a key.
+ *
+ * @param key
+ * @param value
+ * @param customStore Method to get a custom store. Use with caution (see the docs).
+ */
+function set(key, value, customStore = defaultGetStore()) {
+    return customStore('readwrite', (store) => {
+        store.put(value, key);
+        return promisifyRequest(store.transaction);
+    });
+}
+/**
+ * Clear all values in the store.
+ *
+ * @param customStore Method to get a custom store. Use with caution (see the docs).
+ */
+function clear(customStore = defaultGetStore()) {
+    return customStore('readwrite', (store) => {
+        store.clear();
+        return promisifyRequest(store.transaction);
+    });
+}
+
+var IDB_REFERRER_KEY = "referrer";
+var IDB_DYNAMIC_REVSHARE_DB_NAME = "dynamic-revshare";
+function setupDynamicRevshare(key) {
+  var store = createStore(IDB_DYNAMIC_REVSHARE_DB_NAME, IDB_REFERRER_KEY);
+  return {
+    setReferrer: function () {
+      var _setReferrer = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(pointer) {
+        var _pointer, address, weight;
+
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+
+                if (!(typeof pointer === "string")) {
+                  _context.next = 5;
+                  break;
+                }
+
+                pointer = convertToPointer(pointer);
+                _context.next = 7;
+                break;
+
+              case 5:
+                if ("address" in pointer && "weight" in pointer) {
+                  _context.next = 7;
+                  break;
+                }
+
+                throw new Error("Payment pointer must have correct address and weight key.");
+
+              case 7:
+                _pointer = pointer, address = _pointer.address, weight = _pointer.weight;
+                _context.next = 10;
+                return set(key, {
+                  address: address,
+                  weight: weight
+                }, store);
+
+              case 10:
+                _context.next = 15;
+                break;
+
+              case 12:
+                _context.prev = 12;
+                _context.t0 = _context["catch"](0);
+                throw new Error(_context.t0);
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 12]]);
+      }));
+
+      function setReferrer(_x) {
+        return _setReferrer.apply(this, arguments);
+      }
+
+      return setReferrer;
+    }(),
+    load: function () {
+      var _load = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return get(key, store);
+
+              case 2:
+                _context2.t0 = _context2.sent;
+
+                if (_context2.t0) {
+                  _context2.next = 5;
+                  break;
+                }
+
+                _context2.t0 = null;
+
+              case 5:
+                return _context2.abrupt("return", _context2.t0);
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function load() {
+        return _load.apply(this, arguments);
+      }
+
+      return load;
+    }(),
+    syncRoute: function syncRoute() {
+      var _window;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : (_window = window) === null || _window === void 0 ? void 0 : _window.location;
+      var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+        forceWebfundingRestart: true
+      };
+      var searchParams = new URL(page.href).searchParams;
+      var affiliate = searchParams.get("affiliate");
+      var affiliateName = searchParams.get("affiliate-name");
+      var affiliateId = searchParams.get("affiliate-id");
+      if (affiliate) this.setReferrer(decodeURI(affiliate));
+
+      if (opts !== null && opts !== void 0 && opts.forceWebfundingRestart) {
+        // check if webfunding is running, then restart it
+        if (getCurrentPointerAddress()) fund();
+      }
+
+      return {
+        affiliate: affiliate,
+        affiliateId: affiliateId,
+        affiliateName: affiliateName
+      };
+    },
+    clear: function () {
+      var _clear = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return clear(store);
+
+              case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+
+      function clear$1() {
+        return _clear.apply(this, arguments);
+      }
+
+      return clear$1;
+    }()
+  };
+}
+
+var WebMonetization = /*#__PURE__*/function () {
+  function WebMonetization(opts) {
+    _classCallCheck(this, WebMonetization);
+
+    _defineProperty(this, "currentPool", []);
+
+    _defineProperty(this, "receiptVerifierServiceEndpoint", "$webmonetization.org/api/receipts/");
+
+    _defineProperty(this, "affiliatePointer", {
+      affiliate: "affiliate",
+      affiliateName: "affiliate-name",
+      affiliateId: "affiliate-id"
+    });
+
+    this.options = opts;
+    return this;
+  }
+
+  _createClass(WebMonetization, [{
+    key: "set",
+    value: function set(pointers) {
+      this.currentPool = Array.isArray(pointers) ? pointers : [pointers];
+      return this;
+    }
+  }, {
+    key: "add",
+    value: function add(pointers) {
+      return this.registerPaymentPointers(pointers);
+    }
+  }, {
+    key: "registerPaymentPointers",
+    value: function registerPaymentPointers(pointers) {
+      if (!Array.isArray(pointers)) pointers = [pointers];
+      this.currentPool = [].concat(_toConsumableArray(this.currentPool), _toConsumableArray(pointers));
+      return this;
+    }
+  }, {
+    key: "registerAffiliateReferrer",
+    value: function registerAffiliateReferrer(id) {
+      var dynamic = setupDynamicRevshare(id);
+
+      var _dynamic$syncRoute = dynamic.syncRoute(),
+          affiliate = _dynamic$syncRoute.affiliate;
+
+      this.registerPaymentPointers(convertToPointer(affiliate));
+      return this;
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      try {
+        fund(this.currentPool, this.options);
+      } catch (error) {
+        console.warn(error);
+      }
+
+      return this;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.start();
+      return this;
+    }
+  }]);
+
+  return WebMonetization;
+}();
+
+export { WebMonetization, createWebfundingLeaderboard, fund, getCurrentPointerAddress, getCurrentPointerPool, getPaymentPointerSharePercentage, setDefaultAddress, splitFund };
