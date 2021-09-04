@@ -5,14 +5,16 @@ import { convertToPointer } from "./set-pointer-multiple";
 export class WebMonetization {
   public currentPool: WMPointer[] = [];
   receiptVerifierServiceEndpoint: string = "$webmonetization.org/api/receipts/";
-  private options: any;
+  private options: WebMonetizationOptions = {
+    receiptVerifierService: "",
+  };
   private affiliatePointer = {
     affiliate: "affiliate",
     affiliateName: "affiliate-name",
     affiliateId: "affiliate-id",
   };
-  constructor(opts?: any) {
-    this.options = opts;
+  constructor(opts?: WebMonetizationOptions) {
+    if (opts) this.options = opts;
     return this;
   }
 
