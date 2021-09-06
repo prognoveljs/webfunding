@@ -2,11 +2,12 @@ import { setupDynamicRevshare } from "./dynamic-revshare";
 import { fund } from "./fund";
 import { convertToPointer } from "./set-pointer-multiple";
 
-export class WebMonetization {
+export class WebMonetization<IWebMonetization> {
+  static PUBLIC_RECEIPT_VERIFIER_SERVICE = "$webmonetization.org/api/receipts/";
   public currentPool: WMPointer[] = [];
-  receiptVerifierServiceEndpoint: string = "$webmonetization.org/api/receipts/";
   private options: WebMonetizationOptions = {
     receiptVerifierService: "",
+    receiptVerifierServerProxy: "",
   };
   private affiliatePointer = {
     affiliate: "affiliate",
@@ -14,7 +15,9 @@ export class WebMonetization {
     affiliateId: "affiliate-id",
   };
   constructor(opts?: WebMonetizationOptions) {
-    if (opts) this.options = opts;
+    this.options.receiptVerifierService = opts?.receiptVerifierService || "";
+    this.options.receiptVerifierServerProxy = opts?.receiptVerifierServerProxy || "";
+
     return this;
   }
 
@@ -40,6 +43,13 @@ export class WebMonetization {
 
     const { affiliate } = dynamicRevshare.syncRoute();
     this.registerPaymentPointers(convertToPointer(affiliate));
+
+    return this;
+  }
+
+  useReceiptVerifier(verify?: ReceiptVerifier): this {
+    this.options.receiptVerifierService = verify?.receiptVerifierService || "";
+    this.options.receiptVerifierServerProxy = verify?.receiptVerifierServerProxy || "";
 
     return this;
   }

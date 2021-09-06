@@ -38,6 +38,7 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
   return {
     setReferrer: async function (pointer: WMPointer | string) {
       // TODO - make webfunding syntax as default parameter and dissect it
+      console.log("💰 setting referrer to", pointer);
       try {
         if (typeof pointer === "string") {
           pointer = convertToPointer(pointer);
@@ -49,7 +50,7 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
         const { address, weight } = pointer;
         await set(key, { address, weight }, store);
       } catch (err) {
-        throw new Error(err);
+        throw new Error(err as string);
       }
     },
     load: async function (): Promise<WMPointer> {
@@ -59,7 +60,7 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
     syncRoute: function (
       page: Location = window?.location,
       opts = {
-        forceWebfundingRestart: true,
+        forceWebfundingRestart: false,
       },
     ): AffiliateData {
       const searchParams = new URL(page.href).searchParams;
@@ -67,10 +68,14 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
       const affiliateName = searchParams.get("affiliate-name") as string;
       const affiliateId = searchParams.get("affiliate-id") as string;
 
+      console.log("Sync route at", page.href);
+
+      console.log({ affiliate, affiliateId, affiliateName });
+
       if (affiliate) this.setReferrer(decodeURI(affiliate));
       if (opts?.forceWebfundingRestart) {
         // check if webfunding is running, then restart it
-        if (getCurrentPointerAddress()) fund();
+        if (!document.querySelector('meta[name="monetization"]')) fund();
       }
 
       return { affiliate, affiliateId, affiliateName };

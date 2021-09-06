@@ -31,8 +31,15 @@ type WebMonetization = {
   currentPool: WMPointer[];
 };
 
-interface WebMonetizationOptions {
+interface WebMonetizationOptions extends ReceiptVerifier {}
+
+interface ReceiptVerifier {
   receiptVerifierService: string;
+  receiptVerifierServerProxy: string;
+}
+
+interface IWebMonetization {
+  PUBLIC_RECEIPT_VERIFIER_SERVICE: string;
 }
 
 // declare var document: any;
