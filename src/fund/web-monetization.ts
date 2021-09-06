@@ -50,9 +50,7 @@ export class WebMonetization {
     this.chain(async () => {
       const dynamicRevshare = setupDynamicRevshare(id);
 
-      console.log("idb started");
       const { affiliate } = await dynamicRevshare.syncRoute();
-      console.log("idb finish");
       if (affiliate) this.add(`${convertToPointer(affiliate).address}#${weight}`);
 
       return;
@@ -72,7 +70,6 @@ export class WebMonetization {
 
   start(): this {
     this.chain(() => {
-      console.log("chain started");
       try {
         fund(this.currentPool, this.options);
       } catch (error) {
@@ -80,7 +77,6 @@ export class WebMonetization {
       }
     });
 
-    console.log("start()");
     return this;
   }
 
