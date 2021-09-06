@@ -5,6 +5,7 @@ import { convertToPointer } from "./set-pointer-multiple";
 export class WebMonetization {
   static PUBLIC_RECEIPT_VERIFIER_SERVICE = "$webmonetization.org/api/receipts/";
   public currentPool: WMAddress = [];
+  public affiliateReferrer: any;
   private options: WebMonetizationOptions = {
     receiptVerifierService: "",
     receiptVerifierServerProxy: "",
@@ -50,10 +51,17 @@ export class WebMonetization {
     this.chain(async () => {
       const dynamicRevshare = setupDynamicRevshare(id);
 
-      console.log("idb started");
-      const { affiliate } = await dynamicRevshare.syncRoute();
-      console.log("idb finish");
-      if (affiliate) this.add(`${convertToPointer(affiliate).address}#${weight}`);
+      const { affiliate, affiliateName } = await dynamicRevshare.syncRoute();
+      if (affiliate) {
+        this.add(`${convertToPointer(affiliate).address}#${weight}`);
+        this.affiliateReferrer = {
+          paymentPointer: affiliate,
+          weight,
+        };
+        if (affiliateName) this.affiliateReferrer.name = affiliateName;
+      } else {
+        this.affiliateReferrer = null;
+      }
 
       return;
     });
@@ -72,7 +80,6 @@ export class WebMonetization {
 
   start(): this {
     this.chain(() => {
-      console.log("chain started");
       try {
         fund(this.currentPool, this.options);
       } catch (error) {
@@ -80,7 +87,6 @@ export class WebMonetization {
       }
     });
 
-    console.log("start()");
     return this;
   }
 
