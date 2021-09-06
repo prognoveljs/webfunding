@@ -2,7 +2,7 @@ import { setupDynamicRevshare } from "./dynamic-revshare";
 import { fund } from "./fund";
 import { convertToPointer } from "./set-pointer-multiple";
 
-export class WebMonetization<IWebMonetization> {
+export class WebMonetization {
   static PUBLIC_RECEIPT_VERIFIER_SERVICE = "$webmonetization.org/api/receipts/";
   public currentPool: WMAddress = [];
   private options: WebMonetizationOptions = {
@@ -14,62 +14,80 @@ export class WebMonetization<IWebMonetization> {
     affiliateName: "affiliate-name",
     affiliateId: "affiliate-id",
   };
+  queue: Promise<any>;
   constructor(opts?: WebMonetizationOptions) {
     this.options.receiptVerifierService = opts?.receiptVerifierService || "";
     this.options.receiptVerifierServerProxy = opts?.receiptVerifierServerProxy || "";
 
+    this.queue = Promise.resolve() as Promise<any>;
     return this;
   }
 
-  set(pointers: WMAddress): this {
-    if (Array.isArray(pointers)) {
-      this.currentPool = pointers;
-    } else if (pointers) {
-      this.currentPool = [pointers];
-    }
-
-    return this;
+  then(callback: Function) {
+    callback(this.queue);
   }
 
-  add(pointers: WMAddress): this {
-    return this.registerPaymentPointers(pointers);
+  private chain(callback: any) {
+    return (this.queue = this.queue.then(callback));
   }
 
-  registerPaymentPointers(pointers: WMAddress): this {
+  private add(pointers: WMAddress): this {
     if (!Array.isArray(pointers) && pointers) pointers = [pointers];
     this.currentPool = [...(this.currentPool || []), ...(pointers || [])];
 
     return this;
   }
 
-  async asyncRegisterAffiliateReferrer(id: string, weight: string | number = "10%"): Promise<this> {
-    const dynamicRevshare = setupDynamicRevshare(id);
+  registerPaymentPointers(pointers: WMAddress): this {
+    this.chain(() => {
+      this.add(pointers);
+    });
 
-    const { affiliate } = await dynamicRevshare.syncRoute();
-    if (affiliate) this.registerPaymentPointers(`${convertToPointer(affiliate).address}#${weight}`);
+    return this;
+  }
+
+  registerAffiliateReferrer(id: string, weight: string | number = "10%"): this {
+    this.chain(async () => {
+      const dynamicRevshare = setupDynamicRevshare(id);
+
+      console.log("idb started");
+      const { affiliate } = await dynamicRevshare.syncRoute();
+      console.log("idb finish");
+      if (affiliate) this.add(`${convertToPointer(affiliate).address}#${weight}`);
+
+      return;
+    });
 
     return this;
   }
 
   useReceiptVerifier(verify?: ReceiptVerifier): this {
-    this.options.receiptVerifierService = verify?.receiptVerifierService || "";
-    this.options.receiptVerifierServerProxy = verify?.receiptVerifierServerProxy || "";
+    this.chain(() => {
+      this.options.receiptVerifierService = verify?.receiptVerifierService || "";
+      this.options.receiptVerifierServerProxy = verify?.receiptVerifierServerProxy || "";
+    });
 
     return this;
   }
 
   start(): this {
-    try {
-      fund(this.currentPool, this.options);
-    } catch (error) {
-      console.warn(error);
-    }
+    this.chain(() => {
+      console.log("chain started");
+      try {
+        fund(this.currentPool, this.options);
+      } catch (error) {
+        console.warn(error);
+      }
+    });
 
+    console.log("start()");
     return this;
   }
 
   reset(): this {
-    this.start();
+    this.chain(() => {
+      this.start();
+    });
 
     return this;
   }
