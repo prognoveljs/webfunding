@@ -4,7 +4,7 @@ import { convertToPointer } from "./set-pointer-multiple";
 
 export class WebMonetization<IWebMonetization> {
   static PUBLIC_RECEIPT_VERIFIER_SERVICE = "$webmonetization.org/api/receipts/";
-  public currentPool: WMPointer[] = [];
+  public currentPool: WMAddress = [];
   private options: WebMonetizationOptions = {
     receiptVerifierService: "",
     receiptVerifierServerProxy: "",
@@ -21,28 +21,32 @@ export class WebMonetization<IWebMonetization> {
     return this;
   }
 
-  set(pointers: WMPointer | WMPointer[]): this {
-    this.currentPool = Array.isArray(pointers) ? pointers : [pointers];
+  set(pointers: WMAddress): this {
+    if (Array.isArray(pointers)) {
+      this.currentPool = pointers;
+    } else if (pointers) {
+      this.currentPool = [pointers];
+    }
 
     return this;
   }
 
-  add(pointers: WMPointer | WMPointer[]): this {
+  add(pointers: WMAddress): this {
     return this.registerPaymentPointers(pointers);
   }
 
-  registerPaymentPointers(pointers: WMPointer | WMPointer[]): this {
-    if (!Array.isArray(pointers)) pointers = [pointers];
-    this.currentPool = [...this.currentPool, ...pointers];
+  registerPaymentPointers(pointers: WMAddress): this {
+    if (!Array.isArray(pointers) && pointers) pointers = [pointers];
+    this.currentPool = [...(this.currentPool || []), ...(pointers || [])];
 
     return this;
   }
 
-  registerAffiliateReferrer(id: string): this {
+  registerAffiliateReferrer(id: string, weight: string | number = "10%"): this {
     const dynamicRevshare = setupDynamicRevshare(id);
 
     const { affiliate } = dynamicRevshare.syncRoute();
-    this.registerPaymentPointers(convertToPointer(affiliate));
+    this.registerPaymentPointers(`${convertToPointer(affiliate).address}#${weight}`);
 
     return this;
   }
