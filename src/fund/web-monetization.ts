@@ -42,11 +42,11 @@ export class WebMonetization<IWebMonetization> {
     return this;
   }
 
-  registerAffiliateReferrer(id: string, weight: string | number = "10%"): this {
+  async asyncRegisterAffiliateReferrer(id: string, weight: string | number = "10%"): Promise<this> {
     const dynamicRevshare = setupDynamicRevshare(id);
 
-    const { affiliate } = dynamicRevshare.syncRoute();
-    this.registerPaymentPointers(`${convertToPointer(affiliate).address}#${weight}`);
+    const { affiliate } = await dynamicRevshare.syncRoute();
+    if (affiliate) this.registerPaymentPointers(`${convertToPointer(affiliate).address}#${weight}`);
 
     return this;
   }

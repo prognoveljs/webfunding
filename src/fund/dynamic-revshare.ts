@@ -18,13 +18,16 @@ interface DynamicRevshareFactory {
   /**
    *
    */
-  load: () => Promise<WMPointer | null>;
+  load: () => Promise<string | null>;
   /**
    * Sync dynamic revshare referrers of under this key with the current route.
    * Leave `route` parameter empty to let Webfunding sync to the current
    * webpage's location under this dynamic revshare instance is being setup.
    */
-  syncRoute: (route?: Location, opts?: { forceWebfundingRestart: boolean }) => AffiliateData;
+  syncRoute: (
+    route?: Location,
+    opts?: { forceWebfundingRestart: boolean },
+  ) => Promise<AffiliateData>;
   /**
    * Clear all referrers' data from this dynamic revshare instance from browsers' local database.
    */
@@ -47,32 +50,35 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
             throw new Error("Payment pointer must have correct address and weight key.");
           }
         }
-        const { address, weight } = pointer;
-        await set(key, { address, weight }, store);
+        const { address } = pointer;
+        await set(key, address, store);
       } catch (err) {
         throw new Error(err as string);
       }
     },
-    load: async function (): Promise<WMPointer> {
+    load: async function (): Promise<string | null> {
       // this.referrer = get(store, IDB_REFERRER_KEY) as string;
-      return ((await get(key, store)) as WMPointer) || null;
+      return ((await get(key, store)) as string) || null;
     },
-    syncRoute: function (
+    syncRoute: async function (
       page: Location = window?.location,
       opts = {
         forceWebfundingRestart: false,
       },
-    ): AffiliateData {
+    ): Promise<AffiliateData> {
       const searchParams = new URL(page.href).searchParams;
-      const affiliate = searchParams.get("affiliate") as string;
-      const affiliateName = searchParams.get("affiliate-name") as string;
-      const affiliateId = searchParams.get("affiliate-id") as string;
+      let affiliate = decodeURI(searchParams.get("affiliate") || "") as string;
+      let affiliateName = decodeURI(searchParams.get("affiliate-name") || "") as string;
+      let affiliateId = decodeURI(searchParams.get("affiliate-id") || "") as string;
 
-      console.log("Sync route at", page.href);
+      const load = await this.load();
 
-      console.log({ affiliate, affiliateId, affiliateName });
+      if (load) {
+        affiliate = load;
+      } else {
+        if (affiliate) this.setReferrer(affiliate);
+      }
 
-      if (affiliate) this.setReferrer(decodeURI(affiliate));
       if (opts?.forceWebfundingRestart) {
         // check if webfunding is running, then restart it
         if (!document.querySelector('meta[name="monetization"]')) fund();
