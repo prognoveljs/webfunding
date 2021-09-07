@@ -1,5 +1,6 @@
 import { setupDynamicRevshare } from "./dynamic-revshare";
 import { fund } from "./fund";
+import { removeAdsOnWebMonetization } from "./remove-ads";
 import { convertToPointer } from "./set-pointer-multiple";
 
 export class WebMonetization {
@@ -66,6 +67,13 @@ export class WebMonetization {
       return;
     });
 
+    return this;
+  }
+
+  removeAdsOnStream(el: string): this {
+    this.chain(() => {
+      removeAdsOnWebMonetization(el);
+    });
     return this;
   }
 
