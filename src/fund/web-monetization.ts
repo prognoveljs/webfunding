@@ -48,7 +48,7 @@ export class WebMonetization {
     return this;
   }
 
-  registerAffiliateReferrer(id: string, weight: string | number = "10%"): this {
+  registerDynamicRevshare(id: string, weight: string | number = "10%"): this {
     this.chain(async () => {
       const dynamicRevshare = setupDynamicRevshare(id);
 
