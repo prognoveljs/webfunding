@@ -141,15 +141,6 @@ describe("calculating relative weight", () => {
       // two
       WebfundingError(invalidWeight("$wallet.example.com/example-1", error2)),
     );
-
-    const invalidPointerPool3 = [
-      "$wallet.example.com/example-1#40s%",
-      "$wallet.example.com/example-2#60",
-    ];
-    expect(() => calculateRelativeWeight(createPool(invalidPointerPool3))).toThrowError(
-      // three
-      WebfundingError(invalidRelativeWeight("$wallet.example.com/example-1")),
-    );
   });
 });
 

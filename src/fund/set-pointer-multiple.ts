@@ -4,9 +4,10 @@ import {
   getPoolWeightSum,
   setCurrentPointer,
   hasAddress,
+  isValidWeightSyntax,
 } from "./utils";
 import { calculateRelativeWeight } from "./relative-weight";
-import { addressNotFound, addressIsNotAString, WebfundingError } from "./errors";
+import { addressNotFound, addressIsNotAString, WebfundingError, invalidWeight } from "./errors";
 import { isBrowser } from "./fund-browser";
 
 export const DEFAULT_WEIGHT: number = 5;
@@ -56,6 +57,10 @@ export function checkWeight(pointer: WMPointer): WMPointer {
   if (pointer.weight === undefined || pointer.weight === NaN) {
     // if (window) console.warn(weightIsNotANumber(pointer.address));
     pointer.weight = DEFAULT_WEIGHT;
+  }
+
+  if (!isValidWeightSyntax(pointer.weight.toString())) {
+    throw WebfundingError(invalidWeight(pointer.address, pointer.weight));
   }
 
   return pointer;

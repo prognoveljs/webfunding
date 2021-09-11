@@ -190,3 +190,13 @@ export function isNumberOnly(text: unknown): boolean {
 
   return typeof text === "number";
 }
+
+export function isValidWeightSyntax(text: unknown): boolean {
+  if (typeof text === "string") {
+    const regex = /^\d*\.?\d*%?$/gm;
+
+    return regex.test(text);
+  }
+
+  return typeof text === "number";
+}
