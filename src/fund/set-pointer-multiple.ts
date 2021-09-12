@@ -7,7 +7,13 @@ import {
   isValidWeightSyntax,
 } from "./utils";
 import { calculateRelativeWeight } from "./relative-weight";
-import { addressNotFound, addressIsNotAString, WebfundingError, invalidWeight } from "./errors";
+import {
+  addressNotFound,
+  addressIsNotAString,
+  WebfundingError,
+  invalidWeight,
+  invalidMetadataPointerAddress,
+} from "./errors";
 import { isBrowser } from "./fund-browser";
 
 export const DEFAULT_WEIGHT: number = 5;
@@ -41,14 +47,26 @@ export function getPointerAddress(pointer: WMPointer): string {
   return address;
 }
 
-export function createPool(pointers: Array<string | WMPointer>): WMPointer[] {
-  return pointers.map((pointer) => {
+export function createPool(pointers: Array<string | WMPointer | [WMPointer, any]>): WMPointer[] {
+  return pointers.map((pointer: any) => {
     let wmPointer: WMPointer;
+    let metadata: any = { address: "", weight: "" };
+    if (Array.isArray(pointer)) {
+      if (pointer.length > 2) throw WebfundingError(invalidMetadataPointerAddress(pointer));
+      if (typeof pointer[1] !== "object")
+        throw WebfundingError(invalidMetadataPointerAddress(pointer));
+      metadata = { ...pointer[1] } as Object;
+      pointer = pointer[0];
+    } else if (typeof pointer === "object") {
+      metadata = JSON.parse(JSON.stringify(pointer));
+      // metadata = { ...pointer };
+      if (metadata.address) delete metadata.address;
+      if (metadata.weight) delete metadata.weight;
+    }
     if (typeof pointer === "string") pointer = convertToPointer(pointer);
     if (!hasAddress(pointer)) throw WebfundingError(addressNotFound);
     wmPointer = checkWeight(pointer);
-
-    return wmPointer;
+    return { ...wmPointer, ...metadata };
   });
 }
 

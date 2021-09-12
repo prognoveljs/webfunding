@@ -41,7 +41,6 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
   return {
     setReferrer: async function (pointer: WMPointer | string) {
       // TODO - make webfunding syntax as default parameter and dissect it
-      console.log("💰 setting referrer to", pointer);
       try {
         if (typeof pointer === "string") {
           pointer = convertToPointer(pointer);

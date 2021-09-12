@@ -11,7 +11,7 @@ import { createPool, DEFAULT_WEIGHT } from "./set-pointer-multiple";
 import { getCurrentPointerPool, getPoolWeightSum } from "./utils";
 
 export function getPaymentPointerSharePercentage(
-  address: string,
+  pick: string | Object,
   opts?: {
     rawPool?: WMPointer[];
     calculatedPool?: WMPointer[];
@@ -28,7 +28,6 @@ export function getPaymentPointerSharePercentage(
   } catch (error) {
     throw WebfundingError(getStatsPercentageErrorGettingCurrentPool);
   }
-
   try {
     sum = opts?.poolSum || getPoolWeightSum(pool);
   } catch (error) {
@@ -43,7 +42,12 @@ export function getPaymentPointerSharePercentage(
 
   let pointer;
   try {
-    pointer = pool.find((pointer) => pointer.address === address);
+    if (typeof pick === "string") {
+      pointer = pool.find((pointer) => pointer.address === pick);
+    } else if (typeof pick === "object") {
+      const key = Object.keys(pick)[0];
+      pointer = pool.find((pointer: any) => pointer[key] === (pick as any)[key]);
+    }
   } catch (error) {
     throw WebfundingError(getStatsPercentageErrorPickingAddress);
   }

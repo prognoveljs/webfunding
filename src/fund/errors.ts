@@ -13,6 +13,9 @@ export function weightIsNotANumber(str: string) {
   return `${str} has weight that is not a number. It has been set to ${DEFAULT_WEIGHT} (default).`;
 }
 export const invalidAddress = "invalid Web Monetization pointer address is given.";
+export const invalidMetadataPointerAddress = (pointer: any) => {
+  return `invalid pointer with metadata in ${pointer}`;
+};
 
 // multiple pointers
 export const getWinningPointerMustBeANumber =
