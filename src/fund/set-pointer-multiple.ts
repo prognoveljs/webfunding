@@ -50,7 +50,7 @@ export function getPointerAddress(pointer: WMPointer): string {
 export function createPool(pointers: Array<string | WMPointer | [WMPointer, any]>): WMPointer[] {
   return pointers.map((pointer: any) => {
     let wmPointer: WMPointer;
-    let metadata: any = { address: "", weight: "" };
+    let metadata: any = {};
     if (Array.isArray(pointer)) {
       if (pointer.length > 2) throw WebfundingError(invalidMetadataPointerAddress(pointer));
       if (typeof pointer[1] !== "object")

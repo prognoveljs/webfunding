@@ -7,6 +7,7 @@ type weight = number | string;
 interface WMPointer {
   address: string;
   weight?: weight;
+  biasGroup?: string;
 }
 
 interface WMPointerStats {
@@ -41,6 +42,10 @@ interface ReceiptVerifier {
 interface IWebMonetization {
   PUBLIC_RECEIPT_VERIFIER_SERVICE: string;
 }
+
+type WMBiasGroup = {
+  [group: string]: string | number;
+};
 
 // declare var document: any;
 // declare var window: any;

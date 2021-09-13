@@ -7,6 +7,7 @@ export class WebMonetization {
   static PUBLIC_RECEIPT_VERIFIER_SERVICE = "$webmonetization.org/api/receipts/";
   public currentPool: WMAddress = [];
   public affiliateReferrer: any;
+  public biasGroup: WMBiasGroup = {};
   private options: WebMonetizationOptions = {
     receiptVerifierService: "",
     receiptVerifierServerProxy: "",
@@ -85,6 +86,15 @@ export class WebMonetization {
 
     return this;
   }
+
+  // setBiasGroup(groups: WMBiasGroup): this {
+  //   if (!groups) {
+  //   }
+
+  //   this.biasGroup = groups;
+
+  //   return this;
+  // }
 
   start(): this {
     this.chain(() => {

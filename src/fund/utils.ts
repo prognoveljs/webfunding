@@ -157,6 +157,20 @@ export function getCurrentPointerAddress(): string {
   }
 }
 
+// export const DEFAULT_BIAS_GROUP = "DEFAULT_BIAS_GROUP";
+// export function calculateGroupBias(pool: WMPointer[], sum: number, bias: WMBiasGroup) {
+//   const pointersByGroup = Object(bias).keys.reduce((prev: any, cur: string) => {
+//     prev[cur] = [...(prev[cur] || []), ...pool.filter((pointer) => pointer.biasGroup === cur)];
+//     pool = pool.filter((pointer) => pointer.biasGroup !== cur);
+
+//     return prev;
+//   }, {});
+//   if (pool.length) {
+//     pointersByGroup[DEFAULT_BIAS_GROUP] = 0;
+//     pool.map((pointer) => (pointer.biasGroup = DEFAULT_BIAS_GROUP));
+//   }
+// }
+
 export function cleanSinglePointerSyntax(pointer: any): any {
   if (typeof pointer === "string") {
     pointer = pointer.split("#")[0];
