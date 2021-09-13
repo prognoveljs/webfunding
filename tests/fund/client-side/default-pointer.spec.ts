@@ -88,7 +88,6 @@ describe("default pointer", () => {
   test("throw if default address invalid", () => {
     const set = (any) => {
       setDefaultAddress(any);
-      console.log("Default address is", getDefaultAddress());
     };
     //@ts-ignore
     expect(() => set({})).toThrowError(WebfundingError(invalidDefaultAddress));
@@ -98,7 +97,6 @@ describe("default pointer", () => {
   test("throw if default address is array but empty", () => {
     const set = (any) => {
       setDefaultAddress(any);
-      console.log("Default address is", getDefaultAddress());
     };
     //@ts-ignore
     expect(() => set([])).toThrowError(WebfundingError(defaultAddressArrayCannotBeEmpty));

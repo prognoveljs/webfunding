@@ -195,8 +195,6 @@ export function calculateGroupBias(pool: WMPointer[], sum: number, bias: WMBiasG
   }
 
   for (const key in pointersByGroup) {
-    console.log("key:", key);
-    console.log(pointersByGroup[key]);
     pointersByGroup[key].forEach((pointer: WMPointer) => {
       if (typeof pointer.weight !== "number")
         throw WebfundingError(weightIsNotANumber("a pointer during bias calculation"));
