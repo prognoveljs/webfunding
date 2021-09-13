@@ -89,6 +89,7 @@ export class WebMonetization {
 
   setBiasGroup(groups: WMBiasGroup): this {
     this.biasGroup = groups;
+    this.options.biasGroup = groups;
 
     return this;
   }

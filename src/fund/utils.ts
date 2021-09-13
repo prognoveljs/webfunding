@@ -189,11 +189,14 @@ export function calculateGroupBias(pool: WMPointer[], sum: number, bias: WMBiasG
 
   if (default_bias_leftover < 0) throw WebfundingError(invalidBiasGroupTotal);
   if (pool.length) {
-    pointersByGroup[DEFAULT_BIAS_GROUP] = default_bias_leftover;
-    pool.map((pointer) => (pointer.biasGroup = DEFAULT_BIAS_GROUP));
+    pointersByGroup[DEFAULT_BIAS_GROUP] = pool;
+    bias[DEFAULT_BIAS_GROUP] = default_bias_leftover;
+    pool.forEach((pointer) => (pointer.biasGroup = DEFAULT_BIAS_GROUP));
   }
 
   for (const key in pointersByGroup) {
+    console.log("key:", key);
+    console.log(pointersByGroup[key]);
     pointersByGroup[key].forEach((pointer: WMPointer) => {
       if (typeof pointer.weight !== "number")
         throw WebfundingError(weightIsNotANumber("a pointer during bias calculation"));

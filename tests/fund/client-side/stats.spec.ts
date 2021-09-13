@@ -1,9 +1,12 @@
-import { fund } from '../../../src/fund/fund';
-import { forceWebfundingOnBrowser } from '../../../src/fund/fund-browser';
-import { createWebfundingLeaderboard, getPaymentPointerSharePercentage } from '../../../src/fund/stats'
-import { getCurrentPointerPool } from '../../../src/fund/utils';
+import { fund } from "../../../src/fund/fund";
+import { forceWebfundingOnBrowser } from "../../../src/fund/fund-browser";
+import {
+  createWebfundingLeaderboard,
+  getPaymentPointerSharePercentage,
+} from "../../../src/fund/stats";
+import { getCurrentPointerPool } from "../../../src/fund/utils";
 
-describe('Calculating stats is correct', () => {
+describe("Calculating stats is correct", () => {
   const pointers = [
     {
       address: "$coil.com/pointer-test",
@@ -22,86 +25,92 @@ describe('Calculating stats is correct', () => {
   const leaderboard = [
     {
       address: "$coil.com/pointer-test3",
-      chance: 0.6
+      chance: 0.6,
     },
     {
       address: "$coil.com/pointer-test2",
-      chance: 0.3
+      chance: 0.3,
     },
     {
       address: "$coil.com/pointer-test",
-      chance: 0.1
+      chance: 0.1,
     },
-  ]
+  ];
 
-  it('show weight percentage', () => {
-
+  it("show weight percentage", () => {
     forceWebfundingOnBrowser();
-    fund(pointers)
+    fund(pointers);
 
-    expect(getPaymentPointerSharePercentage('$coil.com/pointer-test')).toBe(0.1)
-  })
+    expect(getPaymentPointerSharePercentage("$coil.com/pointer-test")).toBe(0.1);
+  });
 
-  it('show correct leaderboard', () => {
+  it("show correct leaderboard", () => {
     forceWebfundingOnBrowser();
-    fund(pointers)
+    fund(pointers);
 
-    expect(createWebfundingLeaderboard()).toEqual(leaderboard)
-  })
+    expect(createWebfundingLeaderboard()).toEqual(leaderboard);
+  });
 
   const leaderboardRelativeWeight = [
     {
       address: "$coil.com/pointer-test3",
-      chance: 0.54
+      chance: 0.54,
     },
     {
       address: "$coil.com/pointer-test2",
-      chance: 0.27
+      chance: 0.27,
     },
     {
-      address: '$coil.com/pointer-test-with-percentage',
-      chance: 0.1
+      address: "$coil.com/pointer-test-with-percentage",
+      chance: 0.1,
     },
     {
       address: "$coil.com/pointer-test",
-      chance: 0.09
+      chance: 0.09,
     },
-  ]
+  ];
 
-  it('show correct leaderboard with relative weight', () => {
+  it("show correct leaderboard with relative weight", () => {
     forceWebfundingOnBrowser();
-    fund([...pointers, {
-      address: '$coil.com/pointer-test-with-percentage',
-      weight: '10%'
-    }])
+    fund([
+      ...pointers,
+      {
+        address: "$coil.com/pointer-test-with-percentage",
+        weight: "10%",
+      },
+    ]);
 
-    expect(createWebfundingLeaderboard()).toEqual(leaderboardRelativeWeight)
-  })
+    expect(createWebfundingLeaderboard()).toEqual(leaderboardRelativeWeight);
+  });
 
-  it('show correct leaderboard with parameter', () => {
+  it("show correct leaderboard with parameter", () => {
     forceWebfundingOnBrowser();
-    fund([...pointers, {
-      address: '$coil.com/pointer-test-with-percentage',
-      weight: '10%'
-    }])
+    fund([
+      ...pointers,
+      {
+        address: "$coil.com/pointer-test-with-percentage",
+        weight: "10%",
+      },
+    ]);
 
-    const pool = getCurrentPointerPool()
+    const pool = getCurrentPointerPool();
 
-    expect(createWebfundingLeaderboard(pool)).toEqual(leaderboardRelativeWeight)
-  })
+    expect(createWebfundingLeaderboard(pool)).toEqual(leaderboardRelativeWeight);
+  });
 
-  it('leaderboard sort by descending', () => {
+  it("leaderboard sort by descending", () => {
     forceWebfundingOnBrowser();
-    fund(pointers)
-    console.log(getCurrentPointerPool())
+    fund(pointers);
 
-    expect(createWebfundingLeaderboard()).toEqual(leaderboard)
-  })
+    expect(createWebfundingLeaderboard()).toEqual(leaderboard);
+  });
 
-  it('leaderboard sort by ascending', () => {
+  it("leaderboard sort by ascending", () => {
     forceWebfundingOnBrowser();
-    fund(pointers)
+    fund(pointers);
 
-    expect(createWebfundingLeaderboard(undefined, { ascending: true })).toEqual(leaderboard.slice().reverse())
-  })
-})
+    expect(createWebfundingLeaderboard(undefined, { ascending: true })).toEqual(
+      leaderboard.slice().reverse(),
+    );
+  });
+});

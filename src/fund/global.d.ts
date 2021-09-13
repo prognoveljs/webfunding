@@ -15,13 +15,20 @@ interface WMPointerStats {
   chance: number;
 }
 
-interface fundOptions {
+interface fundOptions extends ReceiptVerifier {
   force?: "client" | "server";
   maxPool?: number;
   default?: boolean;
   affiliateId?: string;
   isAffiliateEntry?: boolean;
+  biasGroup?: {
+    [group: string]: number | string;
+  };
+}
+
+interface ReceiptVerifier {
   receiptVerifierService?: string;
+  receiptVerifierServerProxy?: string;
 }
 
 interface defaultAddressOptions {
@@ -32,12 +39,7 @@ type WebMonetization = {
   currentPool: WMPointer[];
 };
 
-interface WebMonetizationOptions extends ReceiptVerifier {}
-
-interface ReceiptVerifier {
-  receiptVerifierService: string;
-  receiptVerifierServerProxy: string;
-}
+interface WebMonetizationOptions extends fundOptions {}
 
 interface IWebMonetization {
   PUBLIC_RECEIPT_VERIFIER_SERVICE: string;

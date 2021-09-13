@@ -127,7 +127,6 @@ describe("calculating relative weight", () => {
 
     expect(() => {
       const test = calculateRelativeWeight(createPool(invalidPointerPool1));
-      console.log(test);
     }).toThrowError(
       // one
       WebfundingError(invalidWeight("$wallet.example.com/example-1", error1)),

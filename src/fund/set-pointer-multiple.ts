@@ -5,6 +5,7 @@ import {
   setCurrentPointer,
   hasAddress,
   isValidWeightSyntax,
+  calculateGroupBias,
 } from "./utils";
 import { calculateRelativeWeight } from "./relative-weight";
 import {
@@ -25,6 +26,9 @@ export function setPointerMultiple(
 ): returnValidPointer {
   let pool: WMPointer[] = createPool(pointers);
   pool = calculateRelativeWeight(pool);
+  if (options?.biasGroup) {
+    pool = calculateGroupBias(pool, getPoolWeightSum(pool), options.biasGroup);
+  }
   const pickedPointer = pickPointer(pool);
   const pointerAddress = getPointerAddress(pickedPointer);
   setCurrentPointer(pool);
