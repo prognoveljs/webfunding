@@ -87,14 +87,11 @@ export class WebMonetization {
     return this;
   }
 
-  // setBiasGroup(groups: WMBiasGroup): this {
-  //   if (!groups) {
-  //   }
+  setBiasGroup(groups: WMBiasGroup): this {
+    this.biasGroup = groups;
 
-  //   this.biasGroup = groups;
-
-  //   return this;
-  // }
+    return this;
+  }
 
   start(): this {
     this.chain(() => {

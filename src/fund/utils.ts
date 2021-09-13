@@ -10,6 +10,10 @@ import {
   defaultAddressArrayCannotBeEmpty,
   invalidDefaultAddress,
   getWinningPointerMustBeANumber,
+  invalidBiasGroup,
+  invalidWeight,
+  invalidBiasGroupTotal,
+  weightIsNotANumber,
 } from "./errors";
 import { getReceiptURL } from "./verfier";
 
@@ -157,19 +161,56 @@ export function getCurrentPointerAddress(): string {
   }
 }
 
-// export const DEFAULT_BIAS_GROUP = "DEFAULT_BIAS_GROUP";
-// export function calculateGroupBias(pool: WMPointer[], sum: number, bias: WMBiasGroup) {
-//   const pointersByGroup = Object(bias).keys.reduce((prev: any, cur: string) => {
-//     prev[cur] = [...(prev[cur] || []), ...pool.filter((pointer) => pointer.biasGroup === cur)];
-//     pool = pool.filter((pointer) => pointer.biasGroup !== cur);
+export const DEFAULT_BIAS_GROUP = "DEFAULT_BIAS_GROUP";
+export function calculateGroupBias(pool: WMPointer[], sum: number, bias: WMBiasGroup): WMPointer[] {
+  let result: WMPointer[] = [];
+  let default_bias_leftover = 1;
+  const pointersGroupPoolSum: {
+    [group: string]: number;
+  } = {};
+  const pointersByGroup = Object.keys(bias).reduce((prev: any, cur: string) => {
+    prev[cur] = [...(prev[cur] || []), ...pool.filter((pointer) => pointer.biasGroup === cur)];
+    pool = pool.filter((pointer) => pointer.biasGroup !== cur);
+    if (typeof bias[cur] === "string") {
+      if (!isValidWeightSyntax(bias[cur]) || (bias[cur] as string).slice(-1) !== "%") {
+        throw WebfundingError(invalidBiasGroup(cur));
+      }
+      bias[cur] = parseFloat(bias[cur] as string) / 100;
+    }
 
-//     return prev;
-//   }, {});
-//   if (pool.length) {
-//     pointersByGroup[DEFAULT_BIAS_GROUP] = 0;
-//     pool.map((pointer) => (pointer.biasGroup = DEFAULT_BIAS_GROUP));
-//   }
-// }
+    try {
+      default_bias_leftover -= bias[cur] as number;
+    } catch (err) {
+      throw WebfundingError(invalidBiasGroup(cur));
+    }
+
+    return prev;
+  }, {});
+
+  if (default_bias_leftover < 0) throw WebfundingError(invalidBiasGroupTotal);
+  if (pool.length) {
+    pointersByGroup[DEFAULT_BIAS_GROUP] = default_bias_leftover;
+    pool.map((pointer) => (pointer.biasGroup = DEFAULT_BIAS_GROUP));
+  }
+
+  for (const key in pointersByGroup) {
+    pointersByGroup[key].forEach((pointer: WMPointer) => {
+      if (typeof pointer.weight !== "number")
+        throw WebfundingError(weightIsNotANumber("a pointer during bias calculation"));
+      pointersGroupPoolSum[key] = (pointersGroupPoolSum[key] || 0) + pointer.weight;
+    });
+
+    const rate = bias[key] as number;
+    const intendedGroupSum = sum * rate;
+
+    pointersByGroup[key].forEach((pointer: WMPointer) => {
+      pointer.weight = (intendedGroupSum / pointersGroupPoolSum[key]) * (pointer.weight as number);
+      result = [...result, pointer];
+    });
+  }
+
+  return result;
+}
 
 export function cleanSinglePointerSyntax(pointer: any): any {
   if (typeof pointer === "string") {

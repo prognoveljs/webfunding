@@ -63,6 +63,13 @@ export const invalidWeight = (address: string, weight: string | number | undefin
   return `weight for payment pointer ${address}#${weight} is invalid.`;
 };
 
+// bias group
+export const invalidBiasGroup = (group: string) => {
+  return `invalid bias group ${group}. It must either a number between 0 - 1 or a percentage below 100%.`;
+};
+export const invalidBiasGroupTotal =
+  "total bias group rate must not exceeding a number equivalent to 100%";
+
 // split fund
 export const splitFundError = `must set web monetization pointer address with fund() before split.`;
 
