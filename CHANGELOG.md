@@ -1,5 +1,13 @@
 # Releases
 
+## 0.2.6
+
+Initlaize WebMonetization class. Early affiliate and bias system implemented.
+
+## 0.2.1 ~ 0.2.5
+
+Adjustment from migrating from Fundme.js to Webfunding.js
+
 ## 0.2.0
 
 - Migrate to webfunding repo
