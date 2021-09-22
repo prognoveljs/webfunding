@@ -42,10 +42,8 @@ type WebMonetization = {
 interface WebMonetizationOptions extends fundOptions {}
 
 interface IWebMonetization {
-  PUBLIC_RECEIPT_VERIFIER_SERVICE: string;
-
-  registerPaymentPointer: (pointer: WMAddress) => this;
-  registerDynamicShare: (id: string, weight: number | string) => this;
+  registerPaymentPointers: (pointer: WMAddress) => this;
+  registerDynamicRevshare: (id: string, weight: number | string) => this;
   removeAdsOnStream: (el: string) => this;
   useReceiptVerifier: (verify?: ReceiptVerifier) => this;
   setBiasGroup: (groups: WMBiasGroup) => this;

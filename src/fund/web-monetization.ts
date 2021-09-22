@@ -3,7 +3,7 @@ import { fund } from "./fund";
 import { removeAdsOnWebMonetization } from "./remove-ads";
 import { convertToPointer } from "./set-pointer-multiple";
 
-export class WebMonetization {
+export class WebMonetization implements IWebMonetization {
   static PUBLIC_RECEIPT_VERIFIER_SERVICE = "$webmonetization.org/api/receipts/";
   public currentPool: WMAddress = [];
   public affiliateReferrer: any;
