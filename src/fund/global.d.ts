@@ -43,6 +43,13 @@ interface WebMonetizationOptions extends fundOptions {}
 
 interface IWebMonetization {
   PUBLIC_RECEIPT_VERIFIER_SERVICE: string;
+
+  registerPaymentPointer: (pointer: WMAddress) => this;
+  registerDynamicShare: (id: string, weight: number | string) => this;
+  removeAdsOnStream: (el: string) => this;
+  useReceiptVerifier: (verify?: ReceiptVerifier) => this;
+  setBiasGroup: (groups: WMBiasGroup) => this;
+  start: () => this;
 }
 
 type WMBiasGroup = {
