@@ -49,7 +49,7 @@ export class WebMonetization implements IWebMonetization {
     return this;
   }
 
-  registerDynamicRevshare(id: string, weight: string | number = "10%"): this {
+  registerDynamicRevshare(id: string = "affiliate", weight: string | number = "10%"): this {
     this.chain(async () => {
       const dynamicRevshare = setupDynamicRevshare(id);
 

@@ -1,5 +1,10 @@
 # Releases
 
+## 0.3.0
+
+- Update readme to use newly Web Monetization class
+- Set `affiliate` as default ID for Web Monetization class setupDynamicRevshare function.
+
 ## 0.2.6
 
 Initlaize WebMonetization class. Early affiliate and bias system implemented.
