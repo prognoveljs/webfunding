@@ -66,9 +66,21 @@ or with Browser native ES modules:
 </script>
 ```
 
+## Explanation
+
+To use Web Monetization with Webfunding.js, you need to import a JavaScript class `WebMonetization` from `webfunding` package.
+
+```js
+import { WebMonetization } from 'webfunding'
+```
+
+`WebMonetization` class exposes a few children function that you can use to configure how you want Web Monetization behaves using Webfunding.js, such as configuring revenue share and such. Most important function of this is `.start()`, which will trigger the Webfunding and calculate Web Monetization based on how you set it up, creating the `monetization` meta tag in HTML header and signal the browser to start the payment stream to designated payee. 
+
+In this case, the most basic usage of Webfunding.js is `new WebMonetization().start()` - but this won't do anything since Webfunding.js doesn't know which payment pointer it needs to pay. So you need to add the payees' addresses somewhere between `new WebMonetization()` and `.start()` first so that Webfunding knows the addresses it needs to pay when the `.start()` function is called. Chain the three of them together you'd get something like `new WebMonetization().registerPaymentPointers(addresses).start()`.
+
 ### 💵 💴 Advanced Monetization - Revenue Share Among Contributors 💶 💷
 
-Web Monetization is commonly start streaming money to a single payment pointer, but you can split revenue using [Probabilitic Revenue Sharing](https://coil.com/p/sharafian/Probabilistic-Revenue-Sharing/8aQDSPsw) method that relies on chance whoever gets picked among contributors.
+Web Monetization is commonly start streaming money to a single payment pointer, but you can split revenue using [Probabilitic Revenue Sharing](https://coil.com/p/sharafian/Probabilistic-Revenue-Sharing/8aQDSPsw) method that relies on chance whoever gets picked among contributors. Revenus share usually shortened as **revshare** in the community.
 
 To split revenue, `.registerPaymentPointers()` must take an array containing strings or our own opiniated Web Monetization pointer object. Pointer address objects must have `address` and `weight` in it.
 
@@ -120,30 +132,64 @@ const money = new WebMonetization()
 
 #### Relative weight revenue sharing 🆕
 
-As of Webfunding.js 0.1.2, you can use fixed percentage based weight to calculate revenue sharing between a few parties.
+You can use fixed percentage based weight to calculate revenue sharing between a few parties.
 
 One example of this is how a blogging platform provides a revenue sharing scheme for authors and their contributors (editors, proofreaders, etc), but it wants 20% of total revenue brought by Web Monetization API. The obvious way to do it is to roll 20% chance for platform's payment pointer before the actual revenue sharing happens; but what happens when the platform want to introduce other parties that also would get fixed chance for the revenue sharing, say, for affiliate referrers?
 
 Webfunding.js provides a simple way to do it:
 
-```html
-<script type="module">
-  import { fund } from '/dist/webfunding.mjs'
+```js
+import { WebMonetization } from 'webfunding'
 
-  import { WebMonetization } from 'webfunding'
-
-  const money = new WebMonetization()
-    .registerPaymentPointers([
-      '$wallet.example.com/this-has-weight-ten#10',
-      '$wallet.example.com/this-has-weight-six#6',
-      // the last person will get 20% of revenue
-      '$wallet.example.com/this-has-weight-seven#20%',
-    ])
-    .start();
-</script>
+const money = new WebMonetization()
+  .registerPaymentPointers([
+    '$wallet.example.com/this-has-weight-ten#10',
+    '$wallet.example.com/this-has-weight-six#6',
+    // the last person will get 20% of revenue
+    '$wallet.example.com/this-has-weight-seven#20%',
+  ])
+  .start();
 ```
 
-In the example above, there are six different contributors (including the author) directly involved in working in one content. Notice that payment pointer for `$wallet.example.com/platform` and `$wallet.example.com/affiliate-referrer` both have `%` following the weight of their shares; what will happen is both of them will take 30% (20% for platform and 10% for referrer) of Web Monezitation revenue while split the rest of 70% shares to six contributors. 
+In the example above, there are six different contributors (including the author) directly involved in working in one content. Notice that payment pointer for `$wallet.example.com/platform` and `$wallet.example.com/affiliate-referrer` both have `%` following the weight of their shares; what will happen is both of them will take 30% (20% for platform and 10% for referrer) of Web Monezitation revenue while split the rest of 70% shares to six contributors.
+
+## `WebMonetization()` chainable functions
+
+Class `WebMonetization` has few children functions that can modify how Web Monetization behaves in Webfunding.js. These functions should be knit together between `WebMonetization` class constructor and the final `.start()` function.
+
+### `.registerPaymentPointers()`
+
+One of the basic functions in `WebMonetization` class. `.registerPaymentPointers()` takes a string of Web Monetization payment pointer or custom-syntax if not including revenue sharing feature, and an array of acceptable Webfunding.js payment pointers that include revshare weights and any other data that might be needed for later purpose. 
+
+Currently `.registerPaymentPointers()` takes three ways to register a payment pointer to be included inside the array parameter, such as:
+
+#### Payment pointer object
+
+(WIP)
+
+#### Custom syntax string
+
+(WIP)
+
+#### Custom syntax + metadata object
+
+(WIP)
+
+### `.registerDynamicRevshare()`
+
+(WIP)
+
+### `.removeAdsOnStream()`
+
+(WIP)
+
+### `.useReceiptVerifier()`
+
+(WIP)
+
+### `setBiasGroup()`
+
+(WIP)
 
 ## ⚠️ Disclaimer
 
