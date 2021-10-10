@@ -191,6 +191,14 @@ Currently `.registerPaymentPointers()` takes three ways to register a payment po
 
 (WIP)
 
+## Get payment pointer revshare pool
+
+(WIP)
+
+## Revshare leaderboard stats
+
+(WIP)
+
 ## ⚠️ Disclaimer
 
 Webfunding.js is still in early phase development and thus API might change a lot! Not ready for production. Use scripts from `dist` folder in the repo if you want to play with it locally.
