@@ -8,7 +8,7 @@ const IDB_DYNAMIC_REVSHARE_DB_NAME: string = "dynamic-revshare";
 
 interface AffiliateData {
   affiliate: string;
-  affiliateId: string;
+  // affiliateId: string;
   affiliateName: string;
 }
 
@@ -68,7 +68,7 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
       const searchParams = new URL(page.href).searchParams;
       let affiliate = decodeURI(searchParams.get("affiliate") || "") as string;
       let affiliateName = decodeURI(searchParams.get("affiliate-name") || "") as string;
-      let affiliateId = decodeURI(searchParams.get("affiliate-id") || "") as string;
+      // let affiliateId = decodeURI(searchParams.get("affiliate-id") || "") as string;
 
       const load = await this.load();
 
@@ -83,7 +83,7 @@ export function setupDynamicRevshare(key: string): DynamicRevshareFactory {
         if (!document.querySelector('meta[name="monetization"]')) fund();
       }
 
-      return { affiliate, affiliateId, affiliateName };
+      return { affiliate, affiliateName };
     },
     clear: async function () {
       await idbClear(store);
